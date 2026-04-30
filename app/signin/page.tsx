@@ -15,12 +15,7 @@ export default function SignIn() {
     <div className="flex flex-col gap-8 w-full max-w-lg mx-auto h-screen justify-center items-center px-4">
       <div className="text-center flex flex-col items-center gap-4">
         <div className="flex items-center gap-6">
-          <Image
-            src="/convex.svg"
-            alt="Convex Logo"
-            width={90}
-            height={90}
-          />
+          <Image src="/convex.svg" alt="Convex Logo" width={90} height={90} />
           <div className="w-px h-20 bg-slate-300 dark:bg-slate-600"></div>
           <Image
             src="/nextjs-icon-light-background.svg"
@@ -107,7 +102,7 @@ export default function SignIn() {
         </div>
         {error && (
           <div className="bg-rose-500/10 border border-rose-500/30 dark:border-rose-500/50 rounded-lg p-4">
-            <p className="text-rose-700 dark:text-rose-300 font-medium text-sm break-words">
+            <p className="text-rose-700 dark:text-rose-300 font-medium text-sm wrap-break-word">
               Error: {error}
             </p>
           </div>
