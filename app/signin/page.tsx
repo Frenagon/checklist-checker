@@ -1,14 +1,13 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-
-import { useAuthActions } from "@convex-dev/auth/react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useState } from 'react';
+import { useAuthActions } from '@convex-dev/auth/react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function SignIn() {
   const { signIn } = useAuthActions();
-  const [flow, setFlow] = useState<"signIn" | "signUp">("signIn");
+  const [flow, setFlow] = useState<'signIn' | 'signUp'>('signIn');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -48,14 +47,14 @@ export default function SignIn() {
           setLoading(true);
           setError(null);
           const formData = new FormData(e.target as HTMLFormElement);
-          formData.set("flow", flow);
-          void signIn("password", formData)
+          formData.set('flow', flow);
+          void signIn('password', formData)
             .catch((error) => {
               setError(error.message);
               setLoading(false);
             })
             .then(() => {
-              router.push("/");
+              router.push('/');
             });
         }}
       >
@@ -75,7 +74,7 @@ export default function SignIn() {
             minLength={8}
             required
           />
-          {flow === "signUp" && (
+          {flow === 'signUp' && (
             <p className="text-xs text-slate-500 dark:text-slate-400 px-1">
               Password must be at least 8 characters
             </p>
@@ -86,19 +85,19 @@ export default function SignIn() {
           type="submit"
           disabled={loading}
         >
-          {loading ? "Loading..." : flow === "signIn" ? "Sign in" : "Sign up"}
+          {loading ? 'Loading...' : flow === 'signIn' ? 'Sign in' : 'Sign up'}
         </button>
         <div className="flex flex-row gap-2 text-sm justify-center">
           <span className="text-slate-600 dark:text-slate-400">
-            {flow === "signIn"
+            {flow === 'signIn'
               ? "Don't have an account?"
-              : "Already have an account?"}
+              : 'Already have an account?'}
           </span>
           <span
             className="text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 font-medium underline decoration-2 underline-offset-2 hover:no-underline cursor-pointer transition-colors"
-            onClick={() => setFlow(flow === "signIn" ? "signUp" : "signIn")}
+            onClick={() => setFlow(flow === 'signIn' ? 'signUp' : 'signIn')}
           >
-            {flow === "signIn" ? "Sign up" : "Sign in"}
+            {flow === 'signIn' ? 'Sign up' : 'Sign in'}
           </span>
         </div>
         {error && (
