@@ -1,9 +1,10 @@
 "use client";
 
-import { useAuthActions } from "@convex-dev/auth/react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
+
+import { useAuthActions } from "@convex-dev/auth/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function SignIn() {
   const { signIn } = useAuthActions();
