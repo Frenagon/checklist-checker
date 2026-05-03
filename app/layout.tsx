@@ -1,18 +1,13 @@
 import './globals.css';
 import { ConvexAuthNextjsServerProvider } from '@convex-dev/auth/nextjs/server';
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono, Noto_Sans } from 'next/font/google';
+import { Geist_Mono, Noto_Sans } from 'next/font/google';
 import ConvexClientProvider from '@/components/auth/ConvexClientProvider';
 import ThemeProvider from '@/components/layout/ThemeProvider';
 import { Toaster } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
 
 const notoSans = Noto_Sans({ subsets: ['latin'], variable: '--font-sans' });
-
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
@@ -39,9 +34,7 @@ export default function RootLayout({
         className={cn('font-sans', notoSans.variable)}
         suppressHydrationWarning
       >
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
+        <body className={`${geistMono.variable} antialiased`}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
