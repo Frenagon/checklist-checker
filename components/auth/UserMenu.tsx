@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { useAuthActions } from '@convex-dev/auth/react';
 import {
