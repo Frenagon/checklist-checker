@@ -2,9 +2,9 @@ import './globals.css';
 import { ConvexAuthNextjsServerProvider } from '@convex-dev/auth/nextjs/server';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Noto_Sans } from 'next/font/google';
-import { Toaster } from 'sonner';
 import ConvexClientProvider from '@/components/auth/ConvexClientProvider';
 import ThemeProvider from '@/components/layout/ThemeProvider';
+import { Toaster } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
 
 const notoSans = Noto_Sans({ subsets: ['latin'], variable: '--font-sans' });
