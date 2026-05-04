@@ -9,7 +9,8 @@
     "predev": "convex dev --until-success && convex dev --once --run-sh \"node setup.mjs --once\" && convex dashboard",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --ignore-pattern \"convex/_generated/**\""
+    "lint": "eslint . --ignore-pattern \"convex/_generated/**\"",
+    "test": "playwright test"
   },
   "dependencies": {
     "@convex-dev/auth": "^0.0.91",
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "@convex-dev/eslint-plugin": "^1.2.0",
+    "@playwright/test": "^1.59.1",
     "@tailwindcss/postcss": "^4.2.1",
     "@types/node": "^24.12.0",
     "@types/react": "^19.2.14",

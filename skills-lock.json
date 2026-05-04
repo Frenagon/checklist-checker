@@ -11,30 +11,41 @@
       "sourceType": "github",
       "computedHash": "20889af7cb9b3abca1e38824f7fffaa873eb0cc4d45187967b97bd85462cf934"
     },
+    "convex": {
+      "source": "get-convex/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/convex/SKILL.md",
+      "computedHash": "1515307c00539d299b2b2ac7084d39a12d6abbc86f665eec585f7de04220328e"
+    },
     "convex-create-component": {
       "source": "get-convex/agent-skills",
       "sourceType": "github",
-      "computedHash": "c97d71b524ea9f784d344af20a766de5d48f14b7b824bf791fa517d1da753aca"
+      "skillPath": "skills/convex-create-component/SKILL.md",
+      "computedHash": "d46d3f80f9701612651a087c4cd37b03ec2bba7f53ac2e661efb2838b0c18f29"
     },
     "convex-migration-helper": {
       "source": "get-convex/agent-skills",
       "sourceType": "github",
-      "computedHash": "bfb51e5b743ac31b313e5e1d206faee7d46bbbc9195360ce9636eead6f13fd3a"
+      "skillPath": "skills/convex-migration-helper/SKILL.md",
+      "computedHash": "8e839a8a51ac6fa5c341bf1bb57d8e5af229395467f1e606c51a8ddde42136d6"
     },
     "convex-performance-audit": {
       "source": "get-convex/agent-skills",
       "sourceType": "github",
-      "computedHash": "3e411d8250678ca8ec739a40c2874f21e4b5ab17c4dd65e72e3d9d9df6851c31"
+      "skillPath": "skills/convex-performance-audit/SKILL.md",
+      "computedHash": "c150925d80d8b003b25dd80a52da016bce2451ebb9da5b4adc75cbf6b6ff37c9"
     },
     "convex-quickstart": {
       "source": "get-convex/agent-skills",
       "sourceType": "github",
-      "computedHash": "7879afbb2b954be36ef29d294f3b6c2851cad54e9f5e5ac90461f0f97d4d1fff"
+      "skillPath": "skills/convex-quickstart/SKILL.md",
+      "computedHash": "60bb7707dc0a87a51f17cfeb004e3fd403346e56694076f30a746ad285a5a7cc"
     },
     "convex-setup-auth": {
       "source": "get-convex/agent-skills",
       "sourceType": "github",
-      "computedHash": "92a5c170cf238f45f08439d9d5d7947af490b880ee8f15306183240483cbed02"
+      "skillPath": "skills/convex-setup-auth/SKILL.md",
+      "computedHash": "152289aa8150432c2c843e5861b554a46aa5992eb44a67041c333a8679d6c5f8"
     },
     "find-skills": {
       "source": "vercel-labs/skills",
