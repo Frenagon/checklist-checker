@@ -1,18 +1,24 @@
+import path from 'path';
 import { defineConfig, devices } from '@playwright/test';
-
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+import dotenv from 'dotenv';
+
+dotenv.config({ path: path.resolve(__dirname, '.env.local') });
 
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
+if (!process.env.VERCEL_AUTOMATION_BYPASS_SECRET) {
+  throw new Error(
+    'VERCEL_AUTOMATION_BYPASS_SECRET is required to run tests against protected deployments',
+  );
+}
+
 export default defineConfig({
-  testDir: './tests',
+  testDir: './test/tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -30,6 +36,11 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    extraHTTPHeaders: {
+      'x-vercel-protection-bypass': process.env.VERCEL_AUTOMATION_BYPASS_SECRET,
+      // Use 'samesitenone' instead of 'true' when testing in an iframe.
+      'x-vercel-set-bypass-cookie': 'true',
+    },
   },
 
   /* Configure projects for major browsers */
