@@ -5,7 +5,7 @@ import Navigation, {
   getActiveTab,
   navigationItems,
   type NavigationTabValue,
-} from '@/components/layout/Navigation';
+} from '@/app/(main)/[[...tab]]/_components/Navigation';
 import {
   AnimatedTabs,
   AnimatedTabsContent,

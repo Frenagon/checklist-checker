@@ -1,8 +1,8 @@
 'use client';
 
 import { use } from 'react';
-import MainTabsShell from '@/components/layout/MainTabsShell';
-import { navigationItems } from '@/components/layout/Navigation';
+import MainTabsShell from '@/app/(main)/[[...tab]]/_components/MainTabsShell';
+import { navigationItems } from '@/app/(main)/[[...tab]]/_components/Navigation';
 
 export default function MainPage({
   params,
