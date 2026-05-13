@@ -1,60 +1,68 @@
 'use client';
 
 import { CalendarDays, ScanLine, Users } from 'lucide-react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { cn } from '@/lib/utils';
+import {
+  AnimatedTabsList,
+  AnimatedTabsTrigger,
+} from '@/components/ui/animated-tabs';
 
-const navigationItems = [
+export const navigationItems = [
   {
+    value: 'scanner',
     href: '/scanner',
     label: 'Scanner',
     icon: ScanLine,
   },
   {
+    value: 'attendance',
     href: '/attendance',
     label: 'Attendance',
     icon: Users,
   },
   {
+    value: 'events',
     href: '/events',
     label: 'Events',
     icon: CalendarDays,
   },
-];
+] as const;
 
-export default function Navigation() {
-  const pathname = usePathname();
+export type NavigationTabValue = (typeof navigationItems)[number]['value'];
 
+export function getActiveTab(pathname: string): NavigationTabValue {
   return (
-    <nav
-      aria-label="Primary navigation"
-      className="border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80"
-    >
-      <div className="mx-auto w-full max-w-6xl px-4 py-3">
-        <div className="grid grid-cols-3 gap-1 rounded-4xl border bg-muted/40 p-1">
-          {navigationItems.map(({ href, label, icon: Icon }) => {
-            const isActive = pathname === href;
+    navigationItems.find(
+      ({ href }) => pathname === href || pathname.startsWith(`${href}/`),
+    )?.value ?? navigationItems[0].value
+  );
+}
 
-            return (
-              <Link
-                key={href}
-                href={href}
-                aria-current={isActive ? 'page' : undefined}
-                className={cn(
-                  'inline-flex min-w-0 items-center justify-center gap-2 rounded-4xl px-4 py-2.5 text-sm font-medium transition-all duration-200',
-                  isActive
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:bg-background/70 hover:text-foreground',
-                )}
-              >
-                <Icon aria-hidden="true" className="size-4" />
-                <span className="truncate">{label}</span>
-              </Link>
-            );
-          })}
-        </div>
-      </div>
+interface NavigationProps {
+  activeTab: NavigationTabValue;
+}
+
+export default function Navigation({ activeTab }: NavigationProps) {
+  return (
+    <nav className="bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
+      <AnimatedTabsList
+        aria-label="Primary navigation"
+        className="grid h-auto w-full grid-cols-3 rounded-4xl border bg-muted/40 p-1"
+        indicatorClassName="rounded-4xl border"
+      >
+        {navigationItems.map(({ value, label, icon: Icon }) => (
+          <AnimatedTabsTrigger
+            key={value}
+            value={value}
+            aria-current={activeTab === value ? 'page' : undefined}
+            className="h-auto min-w-0 rounded-4xl px-2 py-2 text-xs leading-tight sm:px-4 sm:py-2.5 sm:text-sm [&_svg]:size-4"
+          >
+            <span className="flex min-w-0 flex-col items-center justify-center gap-1 sm:flex-row sm:gap-2">
+              <Icon aria-hidden="true" />
+              <span className="truncate">{label}</span>
+            </span>
+          </AnimatedTabsTrigger>
+        ))}
+      </AnimatedTabsList>
     </nav>
   );
 }
