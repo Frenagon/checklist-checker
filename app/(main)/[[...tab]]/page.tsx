@@ -1,6 +1,7 @@
 'use client';
 
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
 import Navigation, {
   getActiveTab,
   navigationItems,
@@ -27,12 +28,8 @@ function PlaceholderSection({
   );
 }
 
-export default function MainPage({
-  params,
-}: {
-  params: Promise<{ tab?: string[] }>;
-}) {
-  const { tab } = use(params);
+export default function MainPage() {
+  const { tab } = useParams<{ tab?: string[] }>();
   const initialPathname = tab?.[0] ? `/${tab[0]}` : navigationItems[0].href;
 
   const [activeTab, setActiveTab] = useState<NavigationTabValue>(() =>
