@@ -1,10 +1,11 @@
 'use client';
 
-import * as React from 'react';
 import {
   createContext,
+  forwardRef,
   useCallback,
   useContext,
+  useLayoutEffect,
   useRef,
   useState,
 } from 'react';
@@ -102,36 +103,43 @@ const AnimatedTabs: React.FC<AnimatedTabsProps> = ({
     [],
   );
 
-  const updateIndicator = useCallback(() => {
-    const list = listRef.current;
-    const current = activeTab;
-    const trigger = current ? triggerRefs.current.get(current) : undefined;
-
-    if (!list || !trigger) {
-      setIndicatorLayout(null);
-      return;
-    }
-
-    const listRect = list.getBoundingClientRect();
-    const triggerRect = trigger.getBoundingClientRect();
-
-    setIndicatorLayout({
-      left: triggerRect.left - listRect.left,
-      width: triggerRect.width,
-    });
-  }, [activeTab]);
-
-  React.useLayoutEffect(() => {
-    updateIndicator();
-
+  useLayoutEffect(() => {
     const list = listRef.current;
     if (!list) return;
 
-    const ro = new ResizeObserver(updateIndicator);
+    const ro = new ResizeObserver(() => {
+      const listRect = list.getBoundingClientRect();
+      const trigger = activeTab
+        ? triggerRefs.current.get(activeTab)
+        : undefined;
+
+      if (!trigger) {
+        setIndicatorLayout(null);
+        return;
+      }
+
+      const triggerRect = trigger.getBoundingClientRect();
+      const newLayout = {
+        left: triggerRect.left - listRect.left,
+        width: triggerRect.width,
+      };
+
+      setIndicatorLayout((prevLayout) => {
+        if (
+          !prevLayout ||
+          prevLayout.left !== newLayout.left ||
+          prevLayout.width !== newLayout.width
+        ) {
+          return newLayout;
+        }
+        return prevLayout;
+      });
+    });
+
     ro.observe(list);
 
     return () => ro.disconnect();
-  }, [updateIndicator]);
+  }, [activeTab]);
 
   return (
     <AnimatedTabsContext.Provider
@@ -154,65 +162,64 @@ const AnimatedTabs: React.FC<AnimatedTabsProps> = ({
   );
 };
 
-const AnimatedTabsList = React.forwardRef<
-  HTMLDivElement,
-  AnimatedTabsListProps
->(({ className, children, indicatorClassName, ...props }, ref) => {
-  const { listRef, indicatorLayout, indicatorVariant } = useAnimatedTabs();
+const AnimatedTabsList = forwardRef<HTMLDivElement, AnimatedTabsListProps>(
+  ({ className, children, indicatorClassName, ...props }, ref) => {
+    const { listRef, indicatorLayout, indicatorVariant } = useAnimatedTabs();
 
-  const transition = indicatorVariants[indicatorVariant].transition;
+    const transition = indicatorVariants[indicatorVariant].transition;
 
-  const setRef = useCallback(
-    (node: HTMLDivElement | null) => {
-      listRef.current = node;
+    const setRef = useCallback(
+      (node: HTMLDivElement | null) => {
+        listRef.current = node;
 
-      if (typeof ref === 'function') {
-        ref(node);
-      } else if (ref) {
-        ref.current = node;
-      }
-    },
-    [listRef, ref],
-  );
+        if (typeof ref === 'function') {
+          ref(node);
+        } else if (ref) {
+          ref.current = node;
+        }
+      },
+      [listRef, ref],
+    );
 
-  return (
-    <TabsPrimitive.List
-      ref={setRef}
-      data-slot="animated-tabs-list"
-      className={cn(
-        'relative inline-flex h-10 w-fit items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground',
-        className,
-      )}
-      {...props}
-    >
-      {children}
+    return (
+      <TabsPrimitive.List
+        ref={setRef}
+        data-slot="animated-tabs-list"
+        className={cn(
+          'relative inline-flex h-10 w-fit items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground',
+          className,
+        )}
+        {...props}
+      >
+        {children}
 
-      {indicatorLayout && (
-        <motion.div
-          className={cn(
-            'absolute rounded-md',
-            indicatorVariant === 'underline' &&
-              'bottom-0 left-0 h-0.5 bg-primary',
-            (indicatorVariant === 'pill' || indicatorVariant === 'slide') &&
-              'top-1 bottom-1 bg-background shadow-sm',
-            indicatorClassName,
-          )}
-          style={{
-            left: indicatorLayout.left,
-            width: indicatorLayout.width,
-          }}
-          layout
-          transition={transition}
-          aria-hidden
-        />
-      )}
-    </TabsPrimitive.List>
-  );
-});
+        {indicatorLayout && (
+          <motion.div
+            className={cn(
+              'absolute rounded-md',
+              indicatorVariant === 'underline' &&
+                'bottom-0 left-0 h-0.5 bg-primary',
+              (indicatorVariant === 'pill' || indicatorVariant === 'slide') &&
+                'top-1 bottom-1 bg-background shadow-sm',
+              indicatorClassName,
+            )}
+            style={{
+              left: indicatorLayout.left,
+              width: indicatorLayout.width,
+            }}
+            layout
+            transition={transition}
+            aria-hidden
+          />
+        )}
+      </TabsPrimitive.List>
+    );
+  },
+);
 
 AnimatedTabsList.displayName = 'AnimatedTabsList';
 
-const AnimatedTabsTrigger = React.forwardRef<
+const AnimatedTabsTrigger = forwardRef<
   HTMLButtonElement,
   React.ComponentProps<typeof TabsPrimitive.Trigger>
 >(({ className, value, ...props }, ref) => {
@@ -248,7 +255,7 @@ const AnimatedTabsTrigger = React.forwardRef<
 });
 AnimatedTabsTrigger.displayName = 'AnimatedTabsTrigger';
 
-const AnimatedTabsContent = React.forwardRef<
+const AnimatedTabsContent = forwardRef<
   HTMLDivElement,
   React.ComponentProps<typeof TabsPrimitive.Content>
 >(({ className, value, children, ...props }, ref) => {
