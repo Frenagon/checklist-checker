@@ -27,16 +27,16 @@ app/
 
 ## Special Files
 
-| File | Purpose |
-|------|---------|
-| `page.tsx` | UI for a route segment |
-| `layout.tsx` | Shared UI for segment and children |
-| `loading.tsx` | Loading UI (Suspense boundary) |
-| `error.tsx` | Error UI (Error boundary) |
-| `not-found.tsx` | 404 UI |
-| `route.ts` | API endpoint |
-| `template.tsx` | Like layout but re-renders on navigation |
-| `default.tsx` | Fallback for parallel routes |
+| File            | Purpose                                  |
+| --------------- | ---------------------------------------- |
+| `page.tsx`      | UI for a route segment                   |
+| `layout.tsx`    | Shared UI for segment and children       |
+| `loading.tsx`   | Loading UI (Suspense boundary)           |
+| `error.tsx`     | Error UI (Error boundary)                |
+| `not-found.tsx` | 404 UI                                   |
+| `route.ts`      | API endpoint                             |
+| `template.tsx`  | Like layout but re-renders on navigation |
+| `default.tsx`   | Fallback for parallel routes             |
 
 ## Route Segments
 
@@ -74,6 +74,7 @@ app/
 ```
 
 Conventions:
+
 - `(.)` - same level
 - `(..)` - one level up
 - `(..)(..)` - two levels up
@@ -96,8 +97,7 @@ Prefix with `_` to exclude from routing.
 
 ```ts
 // middleware.ts (root of project)
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextResponse, type NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
   // Auth, redirects, rewrites, etc.
@@ -115,8 +115,7 @@ Renamed for clarity - same capabilities, different names:
 
 ```ts
 // proxy.ts (root of project)
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextResponse, type NextRequest } from 'next/server';
 
 export function proxy(request: NextRequest) {
   // Same logic as middleware
@@ -128,10 +127,10 @@ export const proxyConfig = {
 };
 ```
 
-| Version | File | Export | Config |
-|---------|------|--------|--------|
-| v14-15 | `middleware.ts` | `middleware()` | `config` |
-| v16+ | `proxy.ts` | `proxy()` | `proxyConfig` |
+| Version | File            | Export         | Config        |
+| ------- | --------------- | -------------- | ------------- |
+| v14-15  | `middleware.ts` | `middleware()` | `config`      |
+| v16+    | `proxy.ts`      | `proxy()`      | `proxyConfig` |
 
 **Migration**: Run `npx @next/codemod@latest upgrade` to auto-rename.
 
