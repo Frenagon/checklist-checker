@@ -41,7 +41,6 @@ export default function MainPage() {
       ({ href }) => window.location.pathname === href,
     );
 
-    console.log('Initial pathname:', window.location.pathname);
     if (window.location.pathname === '/') {
       updateUrl(navigationItems[0].href, 'replace');
     } else if (!isKnownPath) {
