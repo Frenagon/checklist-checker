@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
 import Navigation, {
   getActiveTab,
   navigationItems,
@@ -38,15 +38,14 @@ export default function MainPage() {
 
   useEffect(() => {
     const isKnownPath = navigationItems.some(
-      ({ href }) =>
-        window.location.pathname === href ||
-        window.location.pathname.startsWith(`${href}/`),
+      ({ href }) => window.location.pathname === href,
     );
 
-    if (!isKnownPath || window.location.pathname === '/') {
+    console.log('Initial pathname:', window.location.pathname);
+    if (window.location.pathname === '/') {
       updateUrl(navigationItems[0].href, 'replace');
-    } else {
-      updateUrl(initialPathname, 'replace');
+    } else if (!isKnownPath) {
+      notFound();
     }
 
     const syncFromUrl = () => {
