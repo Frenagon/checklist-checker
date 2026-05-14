@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import UserMenu from '@/components/auth/UserMenu';
+import UserMenu from '@/app/(main)/_components/UserMenu';
 
 export default function Header() {
   return (
