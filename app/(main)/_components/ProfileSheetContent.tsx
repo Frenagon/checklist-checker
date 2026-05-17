@@ -1,5 +1,3 @@
-'use client';
-
 import { BadgeCheck, UserRound } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
