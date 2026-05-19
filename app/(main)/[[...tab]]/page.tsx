@@ -29,7 +29,8 @@ function PlaceholderSection({
 }
 
 export default function MainPage() {
-  const { tab } = useParams<{ tab?: string[] }>();
+  const params = useParams<{ tab?: string[] }>();
+  const tab = params?.tab;
   const initialPathname = tab?.[0] ? `/${tab[0]}` : navigationItems[0].href;
 
   const [activeTab, setActiveTab] = useState<NavigationTabValue>(() =>
