@@ -155,15 +155,16 @@ export default internalAction({
   args: {},
   handler: async (
     ctx,
-  ): Promise<{
-    created: number;
-    tables: SeedSummary[];
-    updated: number;
-  }> => {
+  ): Promise<
+    | {
+        created: number;
+        tables: SeedSummary[];
+        updated: number;
+      }
+    | string
+  > => {
     if (process.env.ALLOW_SEEDING !== 'true') {
-      throw new Error(
-        'Seeding is disabled. Set the ALLOW_SEEDING environment variable to "true" to enable it.',
-      );
+      return 'Seeding is disabled. Set the ALLOW_SEEDING environment variable to "true" to enable it.';
     }
 
     const tables: SeedSummary[] = [await seedUsers(ctx)];
