@@ -11,27 +11,7 @@ import {
   internalQuery,
   type ActionCtx,
 } from './_generated/server';
-
-const previewUsers = [
-  {
-    email: 'alex@checklist-checker.example',
-    image: 'https://api.dicebear.com/9.x/initials/svg?seed=Alex%20Morgan',
-    name: 'Alex Morgan',
-    password: 'preview123',
-  },
-  {
-    email: 'sam@checklist-checker.example',
-    image: 'https://api.dicebear.com/9.x/initials/svg?seed=Sam%20Rivera',
-    name: 'Sam Rivera',
-    password: 'preview123',
-  },
-  {
-    email: 'jules@checklist-checker.example',
-    image: 'https://api.dicebear.com/9.x/initials/svg?seed=Jules%20Park',
-    name: 'Jules Park',
-    password: 'preview123',
-  },
-] as const;
+import { users } from './seedData.json';
 
 type SeedSummary = {
   created: number;
@@ -77,7 +57,7 @@ async function syncSeedData<Input, Existing>(
 async function seedUsers(ctx: ActionCtx): Promise<SeedSummary> {
   return syncSeedData(ctx, {
     table: 'users',
-    items: previewUsers,
+    items: users,
     findExisting: async (seedCtx, user): Promise<Id<'users'> | null> => {
       const existingUser: Id<'users'> | null = await seedCtx.runQuery(
         internal.seed.getSeedUserByEmail,
