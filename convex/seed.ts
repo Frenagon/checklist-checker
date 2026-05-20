@@ -164,7 +164,7 @@ export const syncSeedUserProfile = internalMutation({
   },
 });
 
-export const seedPreviewDeployment = internalAction({
+export default internalAction({
   args: {},
   handler: async (
     ctx,
