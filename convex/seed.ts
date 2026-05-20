@@ -160,6 +160,12 @@ export default internalAction({
     tables: SeedSummary[];
     updated: number;
   }> => {
+    if (process.env.ALLOW_SEEDING !== 'true') {
+      throw new Error(
+        'Seeding is disabled. Set the ALLOW_SEEDING environment variable to "true" to enable it.',
+      );
+    }
+
     const tables: SeedSummary[] = [await seedUsers(ctx)];
 
     return {
