@@ -11,7 +11,7 @@ import {
   internalQuery,
   type ActionCtx,
 } from './_generated/server';
-import { users } from './seedData.json';
+import { users } from './seedData.internal';
 
 type SeedSummary = {
   created: number;
@@ -55,6 +55,13 @@ async function syncSeedData<Input, Existing>(
 }
 
 async function seedUsers(ctx: ActionCtx): Promise<SeedSummary> {
+  if (!process.env.SEED_USER_PASSWORD) {
+    throw new Error(
+      'SEED_USER_PASSWORD environment variable is required to seed users',
+    );
+  }
+  const seedUserPassword = process.env.SEED_USER_PASSWORD;
+
   return syncSeedData(ctx, {
     table: 'users',
     items: users,
@@ -73,7 +80,7 @@ async function seedUsers(ctx: ActionCtx): Promise<SeedSummary> {
         provider: 'password',
         account: {
           id: user.email,
-          secret: user.password,
+          secret: seedUserPassword,
         },
         profile: {
           email: user.email,
@@ -89,7 +96,7 @@ async function seedUsers(ctx: ActionCtx): Promise<SeedSummary> {
         provider: 'password',
         account: {
           id: user.email,
-          secret: user.password,
+          secret: seedUserPassword,
         },
       });
       await seedCtx.runMutation(internal.seed.syncSeedUserProfile, {
