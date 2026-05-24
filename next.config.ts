@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
       {
         source: '/',
         destination: '/scanner',
-        permanent: true,
+        permanent: false,
       },
     ];
   },
