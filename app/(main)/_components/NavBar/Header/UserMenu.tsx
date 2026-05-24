@@ -14,7 +14,7 @@ import {
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import ProfileSheetContent from '@/app/(main)/_components/ProfileSheetContent';
+import ProfileSheetContent from '@/app/(main)/_components/NavBar/Header/ProfileSheetContent';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -63,6 +63,7 @@ export default function UserMenu() {
               size="sm"
               className="rounded-full px-2.5"
               disabled={isSigningOut}
+              aria-label="Account"
             >
               <Avatar size="sm">
                 <AvatarFallback>

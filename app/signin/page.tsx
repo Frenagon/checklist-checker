@@ -63,6 +63,7 @@ export default function SignIn() {
           type="email"
           name="email"
           placeholder="Email"
+          autoComplete="email"
           required
         />
         <div className="flex flex-col gap-1">
@@ -71,6 +72,7 @@ export default function SignIn() {
             type="password"
             name="password"
             placeholder="Password"
+            autoComplete="current-password"
             minLength={8}
             required
           />
