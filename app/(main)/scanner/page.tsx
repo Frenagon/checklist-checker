@@ -1,4 +1,4 @@
-export default async function Scanner() {
+export default function Scanner() {
   return (
     <section className="flex flex-col gap-2">
       <h1 className="text-2xl font-semibold tracking-tight">Scanner</h1>
