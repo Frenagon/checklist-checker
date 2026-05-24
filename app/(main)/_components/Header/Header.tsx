@@ -1,13 +1,24 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import UserMenu from '@/app/(main)/_components/UserMenu';
+import UserMenu from '@/app/(main)/_components/Header/UserMenu';
+import { NavigationKey } from '@/app/(main)/_components/Navigation';
+import { DEFAULT_TAB } from '@/app/(main)/layout';
 
-export default function Header() {
+export default function Header({
+  setActiveTab,
+}: {
+  setActiveTab: (tab: NavigationKey) => void;
+}) {
   return (
     <header className="sticky top-0 z-30 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-3">
         <div className="flex items-center">
-          <Link href="/" aria-label="Go to the home page" className="shrink-0">
+          <Link
+            href="/"
+            onClick={() => setActiveTab(DEFAULT_TAB)}
+            aria-label="Go to the home page"
+            className="shrink-0"
+          >
             <Image
               src="/cheche-logo.png"
               width={1130}

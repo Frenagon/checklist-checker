@@ -14,7 +14,7 @@ import {
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import ProfileSheetContent from '@/app/(main)/_components/ProfileSheetContent';
+import ProfileSheetContent from '@/app/(main)/_components/Header/ProfileSheetContent';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
