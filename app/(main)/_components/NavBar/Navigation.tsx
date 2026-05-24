@@ -39,7 +39,7 @@ export function isNavigationKey(value: string): value is NavigationKey {
   return navigationKeys.includes(value as NavigationKey);
 }
 
-export const DEFAULT_TAB = Object.keys(navigationItems)[0] as NavigationKey;
+export const DEFAULT_TAB: NavigationKey = 'scanner';
 
 type NavigationProps = {
   activeTab: NavigationKey;
