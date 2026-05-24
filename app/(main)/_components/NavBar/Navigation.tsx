@@ -1,5 +1,3 @@
-'use client';
-
 import { CalendarDays, ScanLine, Users } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -41,10 +39,12 @@ export function isNavigationKey(value: string): value is NavigationKey {
   return navigationKeys.includes(value as NavigationKey);
 }
 
-interface NavigationProps {
+export const DEFAULT_TAB = Object.keys(navigationItems)[0] as NavigationKey;
+
+type NavigationProps = {
   activeTab: NavigationKey;
   setActiveTab: (tab: NavigationKey) => void;
-}
+};
 
 export default function Navigation({
   activeTab,

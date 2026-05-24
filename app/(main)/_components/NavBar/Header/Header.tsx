@@ -1,8 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import UserMenu from '@/app/(main)/_components/Header/UserMenu';
-import { NavigationKey } from '@/app/(main)/_components/Navigation';
-import { DEFAULT_TAB } from '@/app/(main)/layout';
+import UserMenu from '@/app/(main)/_components/NavBar/Header/UserMenu';
+import {
+  DEFAULT_TAB,
+  NavigationKey,
+} from '@/app/(main)/_components/NavBar/Navigation';
 
 export default function Header({
   setActiveTab,
@@ -14,7 +16,7 @@ export default function Header({
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-3">
         <div className="flex items-center">
           <Link
-            href="/"
+            href={`/${DEFAULT_TAB}`}
             onClick={() => setActiveTab(DEFAULT_TAB)}
             aria-label="Go to the home page"
             className="shrink-0"
