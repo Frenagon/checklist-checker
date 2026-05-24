@@ -63,6 +63,7 @@ export default function UserMenu() {
               size="sm"
               className="rounded-full px-2.5"
               disabled={isSigningOut}
+              aria-label="Account"
             >
               <Avatar size="sm">
                 <AvatarFallback>
