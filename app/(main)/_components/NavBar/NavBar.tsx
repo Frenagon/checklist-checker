@@ -10,10 +10,11 @@ import Navigation, {
 } from '@/app/(main)/_components/NavBar/Navigation';
 
 export default function NavBar() {
-  const pathname = usePathname()?.split('/')[0] || '';
+  const pathname = usePathname()?.split('/')[1] || '';
   const [activeTab, setActiveTab] = useState<NavigationKey>(
     isNavigationKey(pathname) ? pathname : DEFAULT_TAB,
   );
+
   return (
     <>
       <Header setActiveTab={setActiveTab} />
