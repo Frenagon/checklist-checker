@@ -114,7 +114,7 @@ export const saveEvent = mutation({
     const existingActivities = await ctx.db
       .query('activities')
       .withIndex('by_eventId', (q) => q.eq('eventId', eventId))
-      .take(maxActivitiesPerEvent + 1);
+      .collect();
 
     const existingActivitiesById = new Map(
       existingActivities.map((activity) => [activity._id, activity]),
