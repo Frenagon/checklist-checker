@@ -11,7 +11,7 @@ export default defineSchema({
     createdBy: v.id('users'),
     title: v.string(),
     blockedUsers: v.optional(v.array(v.id('users'))),
-  }),
+  }).index('by_createdBy', ['createdBy']),
   activities: defineTable({
     eventId: v.id('events'),
     title: v.string(),
