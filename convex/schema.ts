@@ -17,5 +17,5 @@ export default defineSchema({
     title: v.string(),
     position: v.number(),
     blockedUsers: v.optional(v.array(v.id('users'))),
-  }),
+  }).index('by_eventId', ['eventId']),
 });
