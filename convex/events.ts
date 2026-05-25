@@ -46,7 +46,7 @@ function validateRequiredTitle(title: string, fieldName: string) {
 }
 
 function validateActivities(activities: ActivityInput[]) {
-  if (activities.length >= maxActivitiesPerEvent) {
+  if (activities.length > maxActivitiesPerEvent) {
     throw new AppError(activityLimitError);
   }
 
