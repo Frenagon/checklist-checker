@@ -83,7 +83,7 @@ async function validateEventCreationQuota(
   const events = await ctx.db
     .query('events')
     .withIndex('by_createdBy', (q) => q.eq('createdBy', createdBy))
-    .collect();
+    .take(maxEventsPerUser + 1);
 
   if (events.length >= maxEventsPerUser) {
     throw new AppError(eventLimitError);
