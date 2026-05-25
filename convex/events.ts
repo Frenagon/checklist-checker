@@ -145,12 +145,7 @@ export const saveEvent = mutation({
       const existingActivity = existingActivitiesById.get(activity.id) ?? null;
 
       if (existingActivity === null) {
-        await ctx.db.insert('activities', {
-          eventId,
-          position: activity.position,
-          title,
-        });
-        continue;
+        throw new Error('Activity not found for this event');
       }
 
       if (existingActivity.eventId !== eventId) {
