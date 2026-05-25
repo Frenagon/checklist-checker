@@ -2,8 +2,20 @@ import { getAuthUserId } from '@convex-dev/auth/server';
 import { v } from 'convex/values';
 import type { Doc, Id } from './_generated/dataModel';
 import { mutation, type MutationCtx } from './_generated/server';
+import { AppError, ErrorCodes, ErrorPayload } from './errors.internal';
 
+const maxEventsPerUser = 50;
 const maxActivitiesPerEvent = 50;
+
+const eventLimitError: ErrorPayload = {
+  code: ErrorCodes.EVENT_LIMIT_REACHED,
+  message: `You can create up to ${maxEventsPerUser} events. Delete an existing event before creating a new one.`,
+};
+
+const activityLimitError: ErrorPayload = {
+  code: ErrorCodes.ACTIVITY_LIMIT_REACHED,
+  message: `An event can have up to ${maxActivitiesPerEvent} activities. Remove an existing activity before adding a new one.`,
+};
 
 const eventInputValidator = v.object({
   id: v.optional(v.id('events')),
@@ -35,9 +47,7 @@ function validateRequiredTitle(title: string, fieldName: string) {
 
 function validateActivities(activities: ActivityInput[]) {
   if (activities.length > maxActivitiesPerEvent) {
-    throw new Error(
-      `Events cannot contain more than ${maxActivitiesPerEvent} activities`,
-    );
+    throw new AppError(activityLimitError);
   }
 
   const seenPositions = new Set<number>();
@@ -59,6 +69,25 @@ function validateActivities(activities: ActivityInput[]) {
 
 function sortActivitiesByPosition(activities: ActivityInput[]) {
   return [...activities].sort((left, right) => left.position - right.position);
+}
+
+async function validateEventCreationQuota(
+  ctx: MutationCtx,
+  event: EventInput,
+  createdBy: Id<'users'>,
+) {
+  if (event.id !== undefined) {
+    return;
+  }
+
+  const events = await ctx.db
+    .query('events')
+    .withIndex('by_createdBy', (q) => q.eq('createdBy', createdBy))
+    .collect();
+
+  if (events.length > maxEventsPerUser) {
+    throw new AppError(eventLimitError);
+  }
 }
 
 async function saveOrCreateEvent(
@@ -106,6 +135,7 @@ export const saveEvent = mutation({
 
     validateRequiredTitle(args.event.title, 'Event title');
     validateActivities(args.activities);
+    await validateEventCreationQuota(ctx, args.event, createdBy);
 
     const eventId = await saveOrCreateEvent(ctx, args.event, createdBy);
     const existingActivities = await ctx.db
