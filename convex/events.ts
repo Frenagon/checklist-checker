@@ -46,7 +46,7 @@ function validateRequiredTitle(title: string, fieldName: string) {
 }
 
 function validateActivities(activities: ActivityInput[]) {
-  if (activities.length > maxActivitiesPerEvent) {
+  if (activities.length >= maxActivitiesPerEvent) {
     throw new AppError(activityLimitError);
   }
 
@@ -85,7 +85,7 @@ async function validateEventCreationQuota(
     .withIndex('by_createdBy', (q) => q.eq('createdBy', createdBy))
     .collect();
 
-  if (events.length > maxEventsPerUser) {
+  if (events.length >= maxEventsPerUser) {
     throw new AppError(eventLimitError);
   }
 }
