@@ -7,7 +7,15 @@ import { v } from 'convex/values';
 // The schema provides more precise TypeScript types.
 export default defineSchema({
   ...authTables,
-  numbers: defineTable({
-    value: v.number(),
+  events: defineTable({
+    createdBy: v.id('users'),
+    title: v.string(),
+    blockedUsers: v.optional(v.array(v.id('users'))),
+  }),
+  activities: defineTable({
+    eventId: v.id('events'),
+    title: v.string(),
+    position: v.number(),
+    blockedUsers: v.optional(v.array(v.id('users'))),
   }),
 });
