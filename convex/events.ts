@@ -78,10 +78,7 @@ async function saveOrCreateEvent(
   const existingEvent = await ctx.db.get(event.id);
 
   if (existingEvent === null) {
-    return await ctx.db.insert('events', {
-      createdBy,
-      title,
-    });
+    throw new Error('Invalid event id');
   }
 
   if (existingEvent.createdBy !== createdBy) {
