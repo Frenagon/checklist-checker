@@ -1,7 +1,7 @@
 import { v } from 'convex/values';
 import type { Doc, Id } from './_generated/dataModel';
 import { mutation, query, type MutationCtx } from './_generated/server';
-import { AppError, ErrorCodes, ErrorPayload } from './errors.internal';
+import { AppError, ErrorCodes, type ErrorPayload } from './errors.internal';
 import { requireAuthenticatedUserId } from './users';
 
 const maxEventsPerUser = 50;
