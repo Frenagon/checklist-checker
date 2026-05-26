@@ -10,6 +10,10 @@ export const getActivitiesByEvent = query({
   handler: async (ctx, args): Promise<Doc<'activities'>[]> => {
     await requireAuthenticatedUserId(ctx);
 
+    // TODO: Check that the user is registered for the event.
+
+    // TODO: Check that the user is not banned from the event.
+
     return await ctx.db
       .query('activities')
       .withIndex('by_eventId_and_position', (q) =>
