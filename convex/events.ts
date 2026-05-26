@@ -1,8 +1,8 @@
-import { getAuthUserId } from '@convex-dev/auth/server';
 import { v } from 'convex/values';
 import type { Doc, Id } from './_generated/dataModel';
 import { mutation, type MutationCtx } from './_generated/server';
 import { AppError, ErrorCodes, ErrorPayload } from './errors.internal';
+import { requireAuthenticatedUserId } from './users';
 
 const maxEventsPerUser = 50;
 const maxActivitiesPerEvent = 50;
@@ -127,11 +127,7 @@ export const saveEvent = mutation({
     activities: v.array(activityInputValidator),
   },
   handler: async (ctx, args): Promise<Doc<'events'>> => {
-    const createdBy = await getAuthUserId(ctx);
-
-    if (createdBy === null) {
-      throw new Error('Not authenticated');
-    }
+    const createdBy = await requireAuthenticatedUserId(ctx);
 
     validateRequiredTitle(args.event.title, 'Event title');
     validateActivities(args.activities);
