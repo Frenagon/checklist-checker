@@ -1,6 +1,6 @@
 import { v } from 'convex/values';
 import type { Doc, Id } from './_generated/dataModel';
-import { mutation, type MutationCtx } from './_generated/server';
+import { mutation, query, type MutationCtx } from './_generated/server';
 import { AppError, ErrorCodes, ErrorPayload } from './errors.internal';
 import { requireAuthenticatedUserId } from './users';
 
@@ -192,5 +192,18 @@ export const saveEvent = mutation({
     }
 
     return event;
+  },
+});
+
+export const getOwnedEvents = query({
+  args: {},
+  handler: async (ctx): Promise<Doc<'events'>[]> => {
+    const userId = await requireAuthenticatedUserId(ctx);
+
+    return await ctx.db
+      .query('events')
+      .withIndex('by_createdBy', (q) => q.eq('createdBy', userId))
+      .order('desc')
+      .collect();
   },
 });
