@@ -136,7 +136,7 @@ export const saveEvent = mutation({
     const eventId = await saveOrCreateEvent(ctx, args.event, createdBy);
     const existingActivities = await ctx.db
       .query('activities')
-      .withIndex('by_eventId', (q) => q.eq('eventId', eventId))
+      .withIndex('by_eventId_and_position', (q) => q.eq('eventId', eventId))
       .collect();
 
     const existingActivitiesById = new Map(
