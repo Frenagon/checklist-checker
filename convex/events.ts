@@ -195,7 +195,7 @@ export const saveEvent = mutation({
   },
 });
 
-export const getOwnedEvents = query({
+export const getMyEvents = query({
   args: {},
   handler: async (ctx): Promise<Doc<'events'>[]> => {
     const userId = await requireAuthenticatedUserId(ctx);
