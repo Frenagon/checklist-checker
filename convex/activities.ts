@@ -3,7 +3,7 @@ import type { Doc } from './_generated/dataModel';
 import { query } from './_generated/server';
 import { requireAuthenticatedUserId } from './users';
 
-export const getActivitiesByEvent = query({
+export const getEventActivities = query({
   args: {
     eventId: v.id('events'),
   },
