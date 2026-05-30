@@ -10,12 +10,10 @@ export default defineSchema({
   events: defineTable({
     createdBy: v.id('users'),
     title: v.string(),
-    blockedUsers: v.optional(v.array(v.id('users'))),
   }).index('by_createdBy', ['createdBy']),
   activities: defineTable({
     eventId: v.id('events'),
     title: v.string(),
     position: v.number(),
-    blockedUsers: v.optional(v.array(v.id('users'))),
   }).index('by_eventId_and_position', ['eventId', 'position']),
 });
