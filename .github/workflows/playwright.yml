@@ -11,9 +11,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Fetch Staging and Main branches
+      - name: Fetch Staging branch
         run: |
-          git fetch origin main:main
           git fetch origin staging:staging
       - uses: actions/setup-node@v4
         with:
