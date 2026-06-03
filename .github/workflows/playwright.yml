@@ -22,6 +22,8 @@ jobs:
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
       - name: Run Playwright tests
+        env:
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
         run: pnpm test
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
