@@ -7,8 +7,8 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    env:
-      CI: true # Prevents pnpm or Playwright from hanging on interactive terminal prompts
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
     steps:
       - uses: actions/checkout@v5
 
@@ -18,26 +18,15 @@ jobs:
 
       - uses: actions/setup-node@v5
         with:
-          node-version: lts/*
+          node-version: 22
           cache: pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Debug playwright package
-        run: |
-          node --version
-          pnpm --version
-          pnpm exec playwright --version
-
-      - name: Direct install
-        run: |
-          npx playwright install chromium
-
       - name: Run Playwright tests
         env:
           VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
-          DEBUG: pw:install
         run: pnpm exec playwright test
 
       - uses: actions/upload-artifact@v4
