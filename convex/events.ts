@@ -4,8 +4,38 @@ import { mutation, query, type MutationCtx } from './_generated/server';
 import { AppError, ErrorCodes, type ErrorPayload } from './errors.internal';
 import { requireAuthenticatedUserId } from './users';
 
-const maxEventsPerUser = 50;
-const maxActivitiesPerEvent = 50;
+const maxEventsPerUserRaw = process.env.MAX_EVENTS_PER_USER;
+
+if (maxEventsPerUserRaw === undefined) {
+  throw new Error('MAX_EVENTS_PER_USER environment variable is required');
+}
+
+const maxEventsPerUser = Number(maxEventsPerUserRaw);
+
+if (!Number.isInteger(maxEventsPerUser) || maxEventsPerUser < 0) {
+  throw new Error(
+    'MAX_EVENTS_PER_USER environment variable must be a non-negative integer',
+  );
+}
+
+const maxActivitiesPerEventRaw = process.env.MAX_ACTIVITIES_PER_EVENT;
+
+if (maxActivitiesPerEventRaw === undefined) {
+  throw new Error(
+    'MAX_ACTIVITIES_PER_EVENT environment variable is required',
+  );
+}
+
+const maxActivitiesPerEvent = Number(maxActivitiesPerEventRaw);
+
+if (
+  !Number.isInteger(maxActivitiesPerEvent) ||
+  maxActivitiesPerEvent < 0
+) {
+  throw new Error(
+    'MAX_ACTIVITIES_PER_EVENT environment variable must be a non-negative integer',
+  );
+}
 
 const eventLimitError: ErrorPayload = {
   code: ErrorCodes.EVENT_LIMIT_REACHED,
