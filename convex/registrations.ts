@@ -109,7 +109,9 @@ async function validateEventRegistrationCapacity(
 ) {
   const registrations = await ctx.db
     .query('registrations')
-    .withIndex('by_eventId_and_status', (q) => q.eq('eventId', eventId))
+    .withIndex('by_eventId_and_status', (q) =>
+      q.eq('eventId', eventId).eq('status', 'registered'),
+    )
     .take(maxEventRegistrations);
 
   if (registrations.length >= maxEventRegistrations) {
