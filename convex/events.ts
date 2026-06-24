@@ -21,17 +21,12 @@ if (!Number.isInteger(maxEventsPerUser) || maxEventsPerUser < 0) {
 const maxActivitiesPerEventRaw = process.env.MAX_ACTIVITIES_PER_EVENT;
 
 if (maxActivitiesPerEventRaw === undefined) {
-  throw new Error(
-    'MAX_ACTIVITIES_PER_EVENT environment variable is required',
-  );
+  throw new Error('MAX_ACTIVITIES_PER_EVENT environment variable is required');
 }
 
 const maxActivitiesPerEvent = Number(maxActivitiesPerEventRaw);
 
-if (
-  !Number.isInteger(maxActivitiesPerEvent) ||
-  maxActivitiesPerEvent < 0
-) {
+if (!Number.isInteger(maxActivitiesPerEvent) || maxActivitiesPerEvent < 0) {
   throw new Error(
     'MAX_ACTIVITIES_PER_EVENT environment variable must be a non-negative integer',
   );
@@ -113,7 +108,7 @@ async function validateEventCreationQuota(
   const events = await ctx.db
     .query('events')
     .withIndex('by_createdBy', (q) => q.eq('createdBy', createdBy))
-    .take(maxEventsPerUser + 1);
+    .take(maxEventsPerUser);
 
   if (events.length >= maxEventsPerUser) {
     throw new AppError(eventLimitError);

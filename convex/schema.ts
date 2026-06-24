@@ -22,6 +22,7 @@ export default defineSchema({
     status: v.union(v.literal('registered'), v.literal('blocked')),
   })
     .index('by_userId_and_eventId', ['userId', 'eventId'])
+    .index('by_userId_and_status', ['userId', 'status'])
     .index('by_eventId_and_status', ['eventId', 'status']),
   attendance: defineTable({
     userId: v.id('users'),
