@@ -38,8 +38,13 @@ if (
 }
 
 const blockedRegistrationError: ErrorPayload = {
-  code: ErrorCodes.EVENT_REGISTRATION_BLOCKED,
+  code: ErrorCodes.REGISTRATION_BLOCKED,
   message: 'You are blocked from registering for this event.',
+};
+
+const eventOwnershipRequiredError: ErrorPayload = {
+  code: ErrorCodes.EVENT_OWNERSHIP_REQUIRED,
+  message: 'You must own this event to manage registrations.',
 };
 
 const eventRegistrationLimitError: ErrorPayload = {
@@ -47,8 +52,18 @@ const eventRegistrationLimitError: ErrorPayload = {
   message: `This event has reached its registration capacity of ${maxEventRegistrations}.`,
 };
 
+const registrationNotFoundError: ErrorPayload = {
+  code: ErrorCodes.REGISTRATION_NOT_FOUND,
+  message: 'Registration not found for this event.',
+};
+
+const userNotFoundError: ErrorPayload = {
+  code: ErrorCodes.USER_NOT_FOUND,
+  message: 'User not found.',
+};
+
 const userEventRegistrationLimitError: ErrorPayload = {
-  code: ErrorCodes.USER_EVENT_REGISTRATION_LIMIT_REACHED,
+  code: ErrorCodes.USER_REGISTRATION_LIMIT_REACHED,
   message: `You can register for up to ${maxUserEventRegistrations} events.`,
 };
 
@@ -81,6 +96,36 @@ async function getExistingRegistration(
       q.eq('userId', userId).eq('eventId', eventId),
     )
     .unique();
+}
+
+async function getRegistrationOrThrow(
+  ctx: MutationCtx,
+  userId: Id<'users'>,
+  eventId: Id<'events'>,
+) {
+  const registration = await getExistingRegistration(ctx, userId, eventId);
+
+  if (registration === null) {
+    throw new AppError(registrationNotFoundError);
+  }
+
+  return registration;
+}
+
+async function getUserOrThrow(ctx: MutationCtx, userId: Id<'users'>) {
+  const user = await ctx.db.get(userId);
+
+  if (user === null) {
+    throw new AppError(userNotFoundError);
+  }
+
+  return user;
+}
+
+function validateEventOwnership(event: Doc<'events'>, userId: Id<'users'>) {
+  if (event.createdBy !== userId) {
+    throw new AppError(eventOwnershipRequiredError);
+  }
 }
 
 function validateExistingRegistration(
@@ -135,6 +180,65 @@ async function validateUserRegistrationCapacity(
   }
 }
 
+function alreadyBlockedRegistrationError(
+  registration: Doc<'registrations'>,
+): ErrorPayload {
+  return {
+    code: ErrorCodes.REGISTRATION_ALREADY_BLOCKED,
+    message: 'User is already blocked from this event.',
+    registration,
+  };
+}
+
+async function getOwnedRegistrationOrThrow(
+  ctx: MutationCtx,
+  userId: Id<'users'>,
+  eventId: Id<'events'>,
+) {
+  const currentUserId = await requireAuthenticatedUserId(ctx);
+  const event = await getEventOrThrow(ctx, eventId);
+
+  validateEventOwnership(event, currentUserId);
+  await getUserOrThrow(ctx, userId);
+
+  return await getRegistrationOrThrow(ctx, userId, eventId);
+}
+
+async function changeOwnedRegistrationStatus(
+  ctx: MutationCtx,
+  {
+    eventId,
+    getAlreadyChangedError,
+    status,
+    userId,
+  }: {
+    eventId: Id<'events'>;
+    getAlreadyChangedError: (
+      registration: Doc<'registrations'>,
+    ) => ErrorPayload;
+    status: Doc<'registrations'>['status'];
+    userId: Id<'users'>;
+  },
+) {
+  const registration = await getOwnedRegistrationOrThrow(ctx, userId, eventId);
+
+  if (registration.status === status) {
+    throw new AppError(getAlreadyChangedError(registration));
+  }
+
+  await ctx.db.patch(registration._id, {
+    status,
+  });
+
+  const updatedRegistration = await ctx.db.get(registration._id);
+
+  if (updatedRegistration === null) {
+    throw new Error('Failed to load updated registration');
+  }
+
+  return updatedRegistration;
+}
+
 export const registerToEvent = mutation({
   args: {
     eventId: v.id('events'),
@@ -167,5 +271,20 @@ export const registerToEvent = mutation({
       event,
       registration,
     };
+  },
+});
+
+export const blockUser = mutation({
+  args: {
+    userId: v.id('users'),
+    eventId: v.id('events'),
+  },
+  handler: async (ctx, args): Promise<Doc<'registrations'>> => {
+    return await changeOwnedRegistrationStatus(ctx, {
+      getAlreadyChangedError: alreadyBlockedRegistrationError,
+      status: 'blocked',
+      userId: args.userId,
+      eventId: args.eventId,
+    });
   },
 });
