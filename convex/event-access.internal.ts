@@ -11,7 +11,7 @@ const eventNotFoundError: ErrorPayload = {
 
 const eventOwnershipRequiredError: ErrorPayload = {
   code: ErrorCodes.EVENT_OWNERSHIP_REQUIRED,
-  message: 'You must own this event to manage registrations.',
+  message: 'You must own this event to perform this action.',
 };
 
 const registrationNotFoundError: ErrorPayload = {
