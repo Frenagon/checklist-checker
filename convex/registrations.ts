@@ -47,14 +47,14 @@ const eventOwnershipRequiredError: ErrorPayload = {
   message: 'You must own this event to manage registrations.',
 };
 
-const eventRegistrationLimitError: ErrorPayload = {
-  code: ErrorCodes.EVENT_REGISTRATION_LIMIT_REACHED,
-  message: `This event has reached its registration capacity of ${maxEventRegistrations}.`,
-};
-
 const registrationNotFoundError: ErrorPayload = {
   code: ErrorCodes.REGISTRATION_NOT_FOUND,
   message: 'Registration not found for this event.',
+};
+
+const eventRegistrationLimitError: ErrorPayload = {
+  code: ErrorCodes.EVENT_REGISTRATION_LIMIT_REACHED,
+  message: `This event has reached its registration capacity of ${maxEventRegistrations}.`,
 };
 
 const userNotFoundError: ErrorPayload = {
@@ -180,16 +180,6 @@ async function validateUserRegistrationCapacity(
   }
 }
 
-function alreadyBlockedRegistrationError(
-  registration: Doc<'registrations'>,
-): ErrorPayload {
-  return {
-    code: ErrorCodes.REGISTRATION_ALREADY_BLOCKED,
-    message: 'User is already blocked from this event.',
-    registration,
-  };
-}
-
 async function getOwnedRegistrationOrThrow(
   ctx: MutationCtx,
   userId: Id<'users'>,
@@ -202,41 +192,6 @@ async function getOwnedRegistrationOrThrow(
   await getUserOrThrow(ctx, userId);
 
   return await getRegistrationOrThrow(ctx, userId, eventId);
-}
-
-async function changeOwnedRegistrationStatus(
-  ctx: MutationCtx,
-  {
-    eventId,
-    getAlreadyChangedError,
-    status,
-    userId,
-  }: {
-    eventId: Id<'events'>;
-    getAlreadyChangedError: (
-      registration: Doc<'registrations'>,
-    ) => ErrorPayload;
-    status: Doc<'registrations'>['status'];
-    userId: Id<'users'>;
-  },
-) {
-  const registration = await getOwnedRegistrationOrThrow(ctx, userId, eventId);
-
-  if (registration.status === status) {
-    throw new AppError(getAlreadyChangedError(registration));
-  }
-
-  await ctx.db.patch(registration._id, {
-    status,
-  });
-
-  const updatedRegistration = await ctx.db.get(registration._id);
-
-  if (updatedRegistration === null) {
-    throw new Error('Failed to load updated registration');
-  }
-
-  return updatedRegistration;
 }
 
 export const registerToEvent = mutation({
@@ -280,11 +235,65 @@ export const blockUser = mutation({
     eventId: v.id('events'),
   },
   handler: async (ctx, args): Promise<Doc<'registrations'>> => {
-    return await changeOwnedRegistrationStatus(ctx, {
-      getAlreadyChangedError: alreadyBlockedRegistrationError,
+    const registration = await getOwnedRegistrationOrThrow(
+      ctx,
+      args.userId,
+      args.eventId,
+    );
+
+    if (registration.status === 'blocked') {
+      throw new AppError({
+        code: ErrorCodes.REGISTRATION_ALREADY_BLOCKED,
+        message: 'User is already blocked from this event.',
+        registration,
+      });
+    }
+
+    await ctx.db.patch(registration._id, {
       status: 'blocked',
-      userId: args.userId,
-      eventId: args.eventId,
     });
+
+    const updatedRegistration = await ctx.db.get(registration._id);
+
+    if (updatedRegistration === null) {
+      throw new Error('Failed to load updated registration');
+    }
+
+    return updatedRegistration;
+  },
+});
+
+export const unblockUser = mutation({
+  args: {
+    userId: v.id('users'),
+    eventId: v.id('events'),
+  },
+  handler: async (ctx, args): Promise<Doc<'registrations'>> => {
+    const registration = await getOwnedRegistrationOrThrow(
+      ctx,
+      args.userId,
+      args.eventId,
+    );
+
+    if (registration.status !== 'blocked') {
+      throw new AppError({
+        code: ErrorCodes.REGISTRATION_NOT_BLOCKED,
+        message: 'User is not currently blocked from this event.',
+        registration,
+      });
+    }
+
+    await validateEventRegistrationCapacity(ctx, args.eventId);
+    await ctx.db.patch(registration._id, {
+      status: 'registered',
+    });
+
+    const updatedRegistration = await ctx.db.get(registration._id);
+
+    if (updatedRegistration === null) {
+      throw new Error('Failed to load updated registration');
+    }
+
+    return updatedRegistration;
   },
 });
