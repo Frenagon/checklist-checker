@@ -2,6 +2,12 @@ import { v } from 'convex/values';
 import type { Doc, Id } from './_generated/dataModel';
 import { mutation, type MutationCtx } from './_generated/server';
 import { AppError, ErrorCodes, type ErrorPayload } from './errors.internal';
+import {
+  getEventOrThrow,
+  getExistingRegistration,
+  getRegistrationOrThrow,
+  validateEventOwnership,
+} from './event-access.internal';
 import { requireAuthenticatedUserId } from './users';
 
 const maxEventRegistrationsRaw = process.env.MAX_EVENT_REGISTRATIONS;
@@ -42,16 +48,6 @@ const blockedRegistrationError: ErrorPayload = {
   message: 'You are blocked from registering for this event.',
 };
 
-const eventOwnershipRequiredError: ErrorPayload = {
-  code: ErrorCodes.EVENT_OWNERSHIP_REQUIRED,
-  message: 'You must own this event to manage registrations.',
-};
-
-const registrationNotFoundError: ErrorPayload = {
-  code: ErrorCodes.REGISTRATION_NOT_FOUND,
-  message: 'Registration not found for this event.',
-};
-
 const eventRegistrationLimitError: ErrorPayload = {
   code: ErrorCodes.EVENT_REGISTRATION_LIMIT_REACHED,
   message: `This event has reached its registration capacity of ${maxEventRegistrations}.`,
@@ -72,46 +68,6 @@ type RegisterToEventResult = {
   registration: Doc<'registrations'>;
 };
 
-async function getEventOrThrow(ctx: MutationCtx, eventId: Id<'events'>) {
-  const event = await ctx.db.get(eventId);
-
-  if (event === null) {
-    throw new AppError({
-      code: ErrorCodes.EVENT_NOT_FOUND,
-      message: 'Event not found.',
-    });
-  }
-
-  return event;
-}
-
-async function getExistingRegistration(
-  ctx: MutationCtx,
-  userId: Id<'users'>,
-  eventId: Id<'events'>,
-) {
-  return await ctx.db
-    .query('registrations')
-    .withIndex('by_userId_and_eventId', (q) =>
-      q.eq('userId', userId).eq('eventId', eventId),
-    )
-    .unique();
-}
-
-async function getRegistrationOrThrow(
-  ctx: MutationCtx,
-  userId: Id<'users'>,
-  eventId: Id<'events'>,
-) {
-  const registration = await getExistingRegistration(ctx, userId, eventId);
-
-  if (registration === null) {
-    throw new AppError(registrationNotFoundError);
-  }
-
-  return registration;
-}
-
 async function getUserOrThrow(ctx: MutationCtx, userId: Id<'users'>) {
   const user = await ctx.db.get(userId);
 
@@ -120,12 +76,6 @@ async function getUserOrThrow(ctx: MutationCtx, userId: Id<'users'>) {
   }
 
   return user;
-}
-
-function validateEventOwnership(event: Doc<'events'>, userId: Id<'users'>) {
-  if (event.createdBy !== userId) {
-    throw new AppError(eventOwnershipRequiredError);
-  }
 }
 
 function validateExistingRegistration(
