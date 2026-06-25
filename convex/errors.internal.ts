@@ -18,6 +18,7 @@ export enum ErrorCodes {
   // Registration Errors
   REGISTRATION_BLOCKED = 'REGISTRATION_BLOCKED',
   REGISTRATION_ALREADY_BLOCKED = 'REGISTRATION_ALREADY_BLOCKED',
+  REGISTRATION_NOT_BLOCKED = 'REGISTRATION_NOT_BLOCKED',
   REGISTRATION_NOT_FOUND = 'REGISTRATION_NOT_FOUND',
 
   // User Errors
@@ -47,7 +48,9 @@ export type ErrorPayload =
       registration: Doc<'registrations'>;
     }
   | {
-      code: ErrorCodes.REGISTRATION_ALREADY_BLOCKED;
+      code:
+        | ErrorCodes.REGISTRATION_ALREADY_BLOCKED
+        | ErrorCodes.REGISTRATION_NOT_BLOCKED;
       message: string;
       registration: Doc<'registrations'>;
     };
