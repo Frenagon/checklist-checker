@@ -284,6 +284,7 @@ export const unblockUser = mutation({
     }
 
     await validateEventRegistrationCapacity(ctx, args.eventId);
+    await validateUserRegistrationCapacity(ctx, args.userId);
     await ctx.db.patch(registration._id, {
       status: 'registered',
     });
