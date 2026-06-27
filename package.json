@@ -3,11 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm-run-all --parallel dev:frontend dev:backend",
+    "dev": "npm-run-all --parallel dev:frontend dev:backend dev:storybook",
     "dev:frontend": "next dev",
     "dev:backend": "convex dev",
+    "dev:storybook": "storybook dev -p 6006",
     "predev": "convex dev --until-success && convex dev --once --run-sh \"node setup.mjs --once\" && convex dashboard",
     "build": "next build",
+    "build-storybook": "storybook build",
     "start": "next start",
     "lint": "eslint . --ignore-pattern \"convex/_generated/**\"",
     "test": "playwright test"
@@ -33,6 +35,8 @@
     "@convex-dev/eslint-plugin": "^1.2.0",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
     "@playwright/test": "1.58.2",
+    "@storybook/addon-docs": "10.4.6",
+    "@storybook/nextjs-vite": "10.4.6",
     "@tailwindcss/postcss": "^4.2.1",
     "@types/node": "^24.12.0",
     "@types/react": "^19.2.14",
@@ -43,6 +47,7 @@
     "eslint-config-prettier": "^10.1.8",
     "npm-run-all2": "^8.0.4",
     "prettier": "^3.8.1",
+    "storybook": "10.4.6",
     "tailwindcss": "^4.2.1",
     "typescript": "^5.9.3"
   },
