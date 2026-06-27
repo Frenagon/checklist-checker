@@ -59,7 +59,7 @@ const preview = {
       >
         <div
           className={cn(
-            'min-h-screen bg-background font-sans text-foreground antialiased',
+            'bg-background font-sans text-foreground antialiased',
             notoSans.variable,
             geistMono.variable,
           )}
