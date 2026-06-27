@@ -14,7 +14,25 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
+type StorybookTheme = 'light' | 'dark' | 'system';
+
 const preview = {
+  globalTypes: {
+    theme: {
+      name: 'Theme',
+      description: 'Global theme for stories',
+      defaultValue: 'system',
+      toolbar: {
+        icon: 'mirror',
+        items: [
+          { value: 'light', title: 'Light' },
+          { value: 'dark', title: 'Dark' },
+          { value: 'system', title: 'System' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+  },
   parameters: {
     controls: {
       matchers: {
@@ -27,12 +45,17 @@ const preview = {
     },
   },
   decorators: [
-    (Story) => (
+    (Story, context) => (
       <ThemeProvider
         attribute="class"
         defaultTheme="system"
         enableSystem
         disableTransitionOnChange
+        forcedTheme={
+          context.globals.theme === 'system'
+            ? undefined
+            : (context.globals.theme as StorybookTheme)
+        }
       >
         <div
           className={cn(
