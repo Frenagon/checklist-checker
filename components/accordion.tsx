@@ -50,11 +50,11 @@ export function Accordion({ entries, className }: AccordionProps) {
           <AccordionItem
             key={entry.id}
             value={entry.id}
-            className="overflow-hidden rounded-2xl border bg-background"
+            className="rounded-2xl border bg-background has-[.accordion-entry-trigger:focus-visible]:border-ring has-[.accordion-entry-trigger:focus-visible]:outline-3 has-[.accordion-entry-trigger:focus-visible]:outline-ring/30 has-[.accordion-entry-trigger:focus-visible]:outline-offset-[-3px]"
           >
             <Item className="relative min-h-12 gap-0 rounded-none border-none p-0">
               <AccordionPrimitive.Header className="flex min-w-0 flex-1">
-                <AccordionPrimitive.Trigger className="group/accordion-entry flex min-h-12 min-w-0 flex-1 items-center gap-4 px-4 py-4 text-left text-base font-medium transition-all outline-none hover:underline disabled:pointer-events-none disabled:opacity-50 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30">
+                <AccordionPrimitive.Trigger className="accordion-entry-trigger group/accordion-entry flex min-h-12 min-w-0 flex-1 items-center gap-4 px-4 py-4 text-left text-base font-medium transition-all outline-none hover:underline disabled:pointer-events-none disabled:opacity-50">
                   <span
                     aria-hidden
                     className="flex size-8 shrink-0 items-center justify-center text-muted-foreground [&_svg]:size-8"
