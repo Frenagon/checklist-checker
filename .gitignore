@@ -48,3 +48,9 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# Storybook build output directory
+/storybook-static
+
+# Storybook local engine cache files
+.storybook/progress.json
