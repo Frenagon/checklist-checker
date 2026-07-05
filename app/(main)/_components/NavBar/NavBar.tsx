@@ -1,23 +1,15 @@
 'use client';
 
-import { useState } from 'react';
-import { usePathname } from 'next/navigation';
 import Header from '@/app/(main)/_components/NavBar/Header/Header';
-import Navigation, {
-  DEFAULT_TAB,
-  isNavigationKey,
-  NavigationKey,
-} from '@/app/(main)/_components/NavBar/Navigation';
+import Navigation from '@/app/(main)/_components/NavBar/Navigation';
+import { useActiveTab } from '@/app/(main)/_providers/ActiveTabProvider';
 
 export default function NavBar() {
-  const pathname = usePathname()?.split('/')[1] || '';
-  const [activeTab, setActiveTab] = useState<NavigationKey>(
-    isNavigationKey(pathname) ? pathname : DEFAULT_TAB,
-  );
+  const { activeTab, setActiveTab } = useActiveTab();
 
   return (
     <>
-      <Header setActiveTab={setActiveTab} />
+      <Header />
       <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
     </>
   );

@@ -1,10 +1,80 @@
+'use client';
+
+import ActiveTabLink from '@/app/(main)/_components/ActiveTabLink';
+import EventAccordionPanel from '@/app/(main)/events/_components/EventAccordionPanel';
+import { Accordion, type AccordionEntry } from '@/components/accordion';
+import { Button } from '@/components/ui/button';
+
+const entries: AccordionEntry[] = [
+  {
+    id: 'spring-launch-planning',
+    label: 'Spring Launch Planning',
+    actions: [
+      <Button key="attendance" asChild size="sm" variant="outline">
+        <ActiveTabLink href="/attendance">Attendance</ActiveTabLink>
+      </Button>,
+      <Button key="scanner" asChild size="sm" variant="ghost">
+        <ActiveTabLink href="/scanner">Scanner</ActiveTabLink>
+      </Button>,
+    ],
+    content: (
+      <EventAccordionPanel
+        overview="Coordinate the kickoff presentation, attendee communications, and live checklist flow for the launch event."
+        location="Main Hall"
+        schedule={[
+          '08:30 - Team setup and registration check',
+          '09:00 - Welcome and event briefing',
+          '09:30 - Product walkthrough and Q&A',
+        ]}
+      />
+    ),
+  },
+  {
+    id: 'community-workshop',
+    label: 'Community Workshop',
+    actions: [
+      <Button key="attendance" asChild size="sm" variant="outline">
+        <ActiveTabLink href="/attendance">Attendance</ActiveTabLink>
+      </Button>,
+    ],
+    content: (
+      <EventAccordionPanel
+        overview="Share facilitation notes, workshop materials, and the participation flow used by the staff team on-site."
+        location="Studio B"
+        schedule={[
+          '10:00 - Facilitator check-in',
+          '10:30 - Workshop introduction',
+          '11:00 - Guided breakout sessions',
+        ]}
+      />
+    ),
+  },
+  {
+    id: 'partner-roundtable',
+    label: 'Partner Roundtable',
+    actions: [
+      <Button key="scanner" asChild size="sm" variant="outline">
+        <ActiveTabLink href="/scanner">Scanner</ActiveTabLink>
+      </Button>,
+    ],
+    content: (
+      <EventAccordionPanel
+        overview="Review the session outline, speaker coordination notes, and attendee flow planned for the partner discussion."
+        location="Conference Room 3"
+        schedule={[
+          '13:00 - Speaker arrival and setup',
+          '13:30 - Roundtable introductions',
+          '14:15 - Closing notes and follow-up capture',
+        ]}
+      />
+    ),
+  },
+];
+
 export default function Events() {
   return (
-    <section className="flex flex-col gap-2">
-      <h1 className="text-2xl font-semibold tracking-tight">Events</h1>
-      <p className="text-muted-foreground">
-        Events page placeholder. Event management content will live here.
-      </p>
+    <section className="mx-auto flex w-full max-w-2xl flex-col">
+      <Accordion entries={entries} />
     </section>
   );
 }

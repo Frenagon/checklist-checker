@@ -1,23 +1,15 @@
 import Image from 'next/image';
-import Link from 'next/link';
+import ActiveTabLink from '@/app/(main)/_components/ActiveTabLink';
 import UserMenu from '@/app/(main)/_components/NavBar/Header/UserMenu';
-import {
-  DEFAULT_TAB,
-  NavigationKey,
-} from '@/app/(main)/_components/NavBar/Navigation';
+import { DEFAULT_TAB } from '@/app/(main)/_components/NavBar/navigation-config';
 
-export default function Header({
-  setActiveTab,
-}: {
-  setActiveTab: (tab: NavigationKey) => void;
-}) {
+export default function Header() {
   return (
     <header className="sticky top-0 z-30 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-3">
         <div className="flex items-center">
-          <Link
+          <ActiveTabLink
             href={`/${DEFAULT_TAB}`}
-            onClick={() => setActiveTab(DEFAULT_TAB)}
             aria-label="Go to the home page"
             className="shrink-0"
           >
@@ -29,7 +21,7 @@ export default function Header({
               alt="CheChe logo"
               priority
             />
-          </Link>
+          </ActiveTabLink>
         </div>
 
         <UserMenu />

@@ -1,15 +1,15 @@
 import { CalendarDays, ScanLine, Users } from 'lucide-react';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import ActiveTabLink from '@/app/(main)/_components/ActiveTabLink';
+import {
+  isNavigationKey,
+  type NavigationKey,
+} from '@/app/(main)/_components/NavBar/navigation-config';
 import {
   AnimatedTabs,
   AnimatedTabsList,
   AnimatedTabsTrigger,
 } from '@/components/ui/animated-tabs';
-
-const navigationKeys = ['scanner', 'attendance', 'events'] as const;
-
-export type NavigationKey = (typeof navigationKeys)[number];
 
 type NavigationItem = {
   href: string;
@@ -34,12 +34,6 @@ export const navigationItems: Record<NavigationKey, NavigationItem> = {
     icon: CalendarDays,
   },
 };
-
-export function isNavigationKey(value: string): value is NavigationKey {
-  return navigationKeys.includes(value as NavigationKey);
-}
-
-export const DEFAULT_TAB: NavigationKey = 'scanner';
 
 type NavigationProps = {
   activeTab: NavigationKey;
@@ -79,7 +73,7 @@ export default function Navigation({
                   className="h-auto min-w-0 rounded-4xl px-2 py-2 text-xs leading-tight sm:px-4 sm:py-2.5 sm:text-sm [&_svg]:size-4"
                   asChild
                 >
-                  <Link
+                  <ActiveTabLink
                     href={href}
                     draggable="false"
                     className="select-none cursor-default"
@@ -88,7 +82,7 @@ export default function Navigation({
                       <Icon aria-hidden="true" />
                       <span className="truncate">{label}</span>
                     </span>
-                  </Link>
+                  </ActiveTabLink>
                 </AnimatedTabsTrigger>
               ),
             )}
