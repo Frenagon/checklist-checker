@@ -1,5 +1,6 @@
 'use client';
 
+import ActiveTabLink from '@/app/(main)/_components/ActiveTabLink';
 import EventAccordionPanel from '@/app/(main)/events/_components/EventAccordionPanel';
 import { Accordion, type AccordionEntry } from '@/components/accordion';
 import { Button } from '@/components/ui/button';
@@ -10,10 +11,10 @@ const entries: AccordionEntry[] = [
     label: 'Spring Launch Planning',
     actions: [
       <Button key="attendance" asChild size="sm" variant="outline">
-        <a href="/attendance">Attendance</a>
+        <ActiveTabLink href="/attendance">Attendance</ActiveTabLink>
       </Button>,
       <Button key="scanner" asChild size="sm" variant="ghost">
-        <a href="/scanner">Scanner</a>
+        <ActiveTabLink href="/scanner">Scanner</ActiveTabLink>
       </Button>,
     ],
     content: (
@@ -33,7 +34,7 @@ const entries: AccordionEntry[] = [
     label: 'Community Workshop',
     actions: [
       <Button key="attendance" asChild size="sm" variant="outline">
-        <a href="/attendance">Attendance</a>
+        <ActiveTabLink href="/attendance">Attendance</ActiveTabLink>
       </Button>,
     ],
     content: (
@@ -53,7 +54,7 @@ const entries: AccordionEntry[] = [
     label: 'Partner Roundtable',
     actions: [
       <Button key="scanner" asChild size="sm" variant="outline">
-        <a href="/scanner">Scanner</a>
+        <ActiveTabLink href="/scanner">Scanner</ActiveTabLink>
       </Button>,
     ],
     content: (
