@@ -1,4 +1,6 @@
+import type { ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { ListIcon, PencilIcon, Share2Icon } from 'lucide-react';
 import { Accordion, type AccordionEntry } from '@/components/accordion';
 import { Button } from '@/components/ui/button';
 
@@ -6,7 +8,7 @@ function renderPanel(
   overview: string,
   location: string,
   schedule: string[],
-): React.ReactNode {
+): ReactNode {
   return (
     <div className="flex flex-col gap-4 text-sm">
       <div className="flex flex-col gap-1">
@@ -61,23 +63,28 @@ const entries: AccordionEntry[] = [
 const entriesWithActions: AccordionEntry[] = [
   {
     ...entries[0],
-    actions: [
-      <Button key="attendance" size="sm" variant="outline">
-        Attendance
-      </Button>,
-      <Button key="scanner" size="sm" variant="ghost">
-        Scanner
-      </Button>,
-    ],
+    actions: (
+      <>
+        <Button aria-label="Share event" size="icon-sm" variant="outline">
+          <Share2Icon />
+        </Button>
+        <Button aria-label="View attendees" size="icon-sm" variant="ghost">
+          <ListIcon />
+        </Button>
+        <Button aria-label="Edit event" size="icon-sm" variant="ghost">
+          <PencilIcon />
+        </Button>
+      </>
+    ),
   },
   {
     id: 'partner-roundtable',
     label: 'Partner Roundtable With A Longer Label',
-    actions: [
-      <Button key="scanner" size="sm" variant="outline">
-        Scanner
-      </Button>,
-    ],
+    actions: (
+      <Button aria-label="View attendees" size="icon-sm" variant="outline">
+        <ListIcon />
+      </Button>
+    ),
     content: renderPanel(
       'Review the session outline, speaker coordination notes, and attendee flow planned for the partner discussion.',
       'Conference Room 3',

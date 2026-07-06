@@ -5,11 +5,17 @@ import {
 } from '@convex-dev/auth/nextjs/server';
 
 const isSignInPage = createRouteMatcher(['/signin']);
+const isPublicEventSubscribePage = (pathname: string) =>
+  /^\/events\/[^/]+\/subscribe\/?$/.test(pathname);
 
 export default convexAuthNextjsMiddleware(async (request, { convexAuth }) => {
   const isAuthenticated = await convexAuth.isAuthenticated();
 
-  if (!isAuthenticated && !isSignInPage(request)) {
+  if (
+    !isAuthenticated &&
+    !isSignInPage(request) &&
+    !isPublicEventSubscribePage(request.nextUrl.pathname)
+  ) {
     return nextjsMiddlewareRedirect(request, '/signin');
   }
 });

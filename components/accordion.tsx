@@ -1,33 +1,21 @@
 'use client';
 
-import { Fragment } from 'react';
-import {
-  ChevronDownIcon,
-  ChevronUpIcon,
-  EllipsisVerticalIcon,
-} from 'lucide-react';
+import type { ReactNode } from 'react';
+import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import { Accordion as AccordionPrimitive } from 'radix-ui';
 import {
   AccordionContent,
   AccordionItem,
   Accordion as AccordionRoot,
 } from '@/components/ui/accordion';
-import { Button } from '@/components/ui/button';
 import { Item, ItemActions } from '@/components/ui/item';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 
 export type AccordionEntry = {
   id: string;
-  label: React.ReactNode;
-  actions?: React.ReactNode[];
-  content: React.ReactNode;
+  label: ReactNode;
+  actions?: ReactNode;
+  content: ReactNode;
 };
 
 export type AccordionProps = {
@@ -67,44 +55,10 @@ export function Accordion({ entries, className }: AccordionProps) {
                   </span>
                 </AccordionPrimitive.Trigger>
               </AccordionPrimitive.Header>
-              {entry.actions?.length ? (
-                <>
-                  <Sheet>
-                    <SheetTrigger asChild>
-                      <Button
-                        aria-label={`Open actions for ${entry.id}`}
-                        className="absolute top-1/2 right-4 z-10 -translate-y-1/2 md:hidden"
-                        size="icon-sm"
-                        variant="ghost"
-                      >
-                        <EllipsisVerticalIcon />
-                      </Button>
-                    </SheetTrigger>
-                    <SheetContent
-                      className="inset-0 h-full w-full max-w-none border-0 md:hidden"
-                      showCloseButton
-                      side="bottom"
-                    >
-                      <SheetHeader className="pr-16">
-                        <SheetTitle>{entry.label}</SheetTitle>
-                      </SheetHeader>
-                      <div className="flex flex-1 flex-col gap-3 px-6 pb-6 *:data-[slot=button]:w-full *:data-[slot=button]:justify-start">
-                        {entry.actions.map((action, index) => (
-                          <Fragment key={`${entry.id}-mobile-action-${index}`}>
-                            {action}
-                          </Fragment>
-                        ))}
-                      </div>
-                    </SheetContent>
-                  </Sheet>
-                  <ItemActions className="absolute top-1/2 right-4 z-10 hidden -translate-y-1/2 md:flex">
-                    {entry.actions.map((action, index) => (
-                      <Fragment key={`${entry.id}-action-${index}`}>
-                        {action}
-                      </Fragment>
-                    ))}
-                  </ItemActions>
-                </>
+              {entry.actions ? (
+                <ItemActions className="absolute top-1/2 right-4 z-10 -translate-y-1/2">
+                  {entry.actions}
+                </ItemActions>
               ) : null}
             </Item>
             <AccordionContent>{entry.content}</AccordionContent>
