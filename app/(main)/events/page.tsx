@@ -1,22 +1,14 @@
 'use client';
 
-import ActiveTabLink from '@/app/(main)/_components/ActiveTabLink';
+import EventIconButtons from '@/app/(main)/events/_components/EventIconButtons';
 import EventAccordionPanel from '@/app/(main)/events/_components/EventAccordionPanel';
 import { Accordion, type AccordionEntry } from '@/components/accordion';
-import { Button } from '@/components/ui/button';
 
 const entries: AccordionEntry[] = [
   {
     id: 'spring-launch-planning',
     label: 'Spring Launch Planning',
-    actions: [
-      <Button key="attendance" asChild size="sm" variant="outline">
-        <ActiveTabLink href="/attendance">Attendance</ActiveTabLink>
-      </Button>,
-      <Button key="scanner" asChild size="sm" variant="ghost">
-        <ActiveTabLink href="/scanner">Scanner</ActiveTabLink>
-      </Button>,
-    ],
+    actions: <EventIconButtons eventId="spring-launch-planning" />,
     content: (
       <EventAccordionPanel
         overview="Coordinate the kickoff presentation, attendee communications, and live checklist flow for the launch event."
@@ -32,11 +24,7 @@ const entries: AccordionEntry[] = [
   {
     id: 'community-workshop',
     label: 'Community Workshop',
-    actions: [
-      <Button key="attendance" asChild size="sm" variant="outline">
-        <ActiveTabLink href="/attendance">Attendance</ActiveTabLink>
-      </Button>,
-    ],
+    actions: <EventIconButtons eventId="community-workshop" />,
     content: (
       <EventAccordionPanel
         overview="Share facilitation notes, workshop materials, and the participation flow used by the staff team on-site."
@@ -52,11 +40,7 @@ const entries: AccordionEntry[] = [
   {
     id: 'partner-roundtable',
     label: 'Partner Roundtable',
-    actions: [
-      <Button key="scanner" asChild size="sm" variant="outline">
-        <ActiveTabLink href="/scanner">Scanner</ActiveTabLink>
-      </Button>,
-    ],
+    actions: <EventIconButtons eventId="partner-roundtable" />,
     content: (
       <EventAccordionPanel
         overview="Review the session outline, speaker coordination notes, and attendee flow planned for the partner discussion."
