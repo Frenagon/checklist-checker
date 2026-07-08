@@ -1,7 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
+import { ChevronDownIcon } from 'lucide-react';
 import { Accordion as AccordionPrimitive } from 'radix-ui';
 import {
   AccordionContent,
@@ -47,8 +47,7 @@ export function Accordion({ entries, className }: AccordionProps) {
                     aria-hidden
                     className="flex size-8 shrink-0 items-center justify-center text-muted-foreground [&_svg]:size-8"
                   >
-                    <ChevronDownIcon className="group-aria-expanded/accordion-entry:hidden" />
-                    <ChevronUpIcon className="hidden group-aria-expanded/accordion-entry:block" />
+                    <ChevronDownIcon className="transition-transform duration-200 group-aria-expanded/accordion-entry:rotate-180" />
                   </span>
                   <span className="absolute left-1/2 max-w-[calc(100%-7rem)] -translate-x-1/2 text-center text-base leading-snug">
                     {entry.label}
