@@ -2,10 +2,11 @@ import './globals.css';
 import { ConvexAuthNextjsServerProvider } from '@convex-dev/auth/nextjs/server';
 import type { Metadata } from 'next';
 import { Geist_Mono, Noto_Sans } from 'next/font/google';
-import { Toaster } from '@/components/ui/sonner';
-import { cn } from '@/lib/utils';
 import ConvexClientProvider from '@/app/_providers/ConvexClientProvider';
 import ThemeProvider from '@/app/_providers/ThemeProvider';
+import { Toaster } from '@/components/ui/sonner';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
 
 const notoSans = Noto_Sans({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -41,8 +42,10 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <ConvexClientProvider>{children}</ConvexClientProvider>
-            <Toaster />
+            <TooltipProvider>
+              <ConvexClientProvider>{children}</ConvexClientProvider>
+              <Toaster />
+            </TooltipProvider>
           </ThemeProvider>
         </body>
       </html>

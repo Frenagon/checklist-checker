@@ -1,11 +1,11 @@
 'use client';
 
 import {
-  type ComponentProps,
-  type ComponentType,
   useCallback,
   useMemo,
   useState,
+  type ComponentProps,
+  type ComponentType,
 } from 'react';
 import {
   CopyIcon,
@@ -36,12 +36,17 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { cn } from '@/lib/utils';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import {
   getEventAttendeesPath,
   getEventEditPath,
   getEventSubscribeUrl,
 } from '@/lib/event-links';
+import { cn } from '@/lib/utils';
 
 export type EventIconButtonsProps = {
   eventId: string;
@@ -71,7 +76,10 @@ export default function EventIconButtons({
   const [isMobileShareOpen, setIsMobileShareOpen] = useState(false);
 
   const subscribeUrl = useMemo(() => getEventSubscribeUrl(eventId), [eventId]);
-  const attendeesPath = useMemo(() => getEventAttendeesPath(eventId), [eventId]);
+  const attendeesPath = useMemo(
+    () => getEventAttendeesPath(eventId),
+    [eventId],
+  );
   const editPath = useMemo(() => getEventEditPath(eventId), [eventId]);
 
   const handleEmailShare = useCallback(() => {
@@ -144,15 +152,22 @@ export default function EventIconButtons({
     <div className={cn('flex items-center', className)}>
       <div className="hidden items-center gap-2 md:flex">
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              aria-label="Share event"
-              size="icon-sm"
-              variant="outline"
-            >
-              <Share2Icon />
-            </Button>
-          </DropdownMenuTrigger>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  aria-label="Share event"
+                  size="icon-sm"
+                  variant="outline"
+                >
+                  <Share2Icon />
+                </Button>
+              </DropdownMenuTrigger>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Share event</p>
+            </TooltipContent>
+          </Tooltip>
           <DropdownMenuContent align="end" className="min-w-44">
             <DropdownMenuLabel>Share event</DropdownMenuLabel>
             <DropdownMenuSeparator />
@@ -167,17 +182,41 @@ export default function EventIconButtons({
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <Button asChild aria-label="View attendees" size="icon-sm" variant="ghost">
-          <ActiveTabLink href={attendeesPath}>
-            <ListIcon />
-          </ActiveTabLink>
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              asChild
+              aria-label="View attendees"
+              size="icon-sm"
+              variant="ghost"
+            >
+              <ActiveTabLink href={attendeesPath}>
+                <ListIcon />
+              </ActiveTabLink>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>View attendees</p>
+          </TooltipContent>
+        </Tooltip>
 
-        <Button asChild aria-label="Edit event" size="icon-sm" variant="ghost">
-          <ActiveTabLink href={editPath}>
-            <PencilIcon />
-          </ActiveTabLink>
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              asChild
+              aria-label="Edit event"
+              size="icon-sm"
+              variant="ghost"
+            >
+              <ActiveTabLink href={editPath}>
+                <PencilIcon />
+              </ActiveTabLink>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Edit event</p>
+          </TooltipContent>
+        </Tooltip>
       </div>
 
       <Sheet open={isMobileMenuOpen} onOpenChange={handleMobileSheetChange}>
