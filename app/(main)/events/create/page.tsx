@@ -1,5 +1,5 @@
 import EventFormPage from '@/app/(main)/events/_components/EventFormPage';
 
-export default function EventEditPage() {
+export default function EventCreatePage() {
   return <EventFormPage />;
 }
