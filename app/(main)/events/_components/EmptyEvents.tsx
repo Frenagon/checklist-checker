@@ -17,7 +17,7 @@ export type EmptyEventsProps = {
 
 export default function EmptyEvents({ className }: EmptyEventsProps) {
   return (
-    <Empty className={cn('border px-6 py-10 sm:px-12 sm:py-14', className)}>
+    <Empty className={cn('px-6 py-10 sm:px-12 sm:py-14', className)}>
       <EmptyHeader className="gap-3">
         <EmptyMedia variant="icon">
           <CalendarPlusIcon />
