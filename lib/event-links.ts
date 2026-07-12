@@ -1,21 +1,31 @@
-function encodeEventId(eventId: string) {
-  return encodeURIComponent(eventId);
-}
-
 function normalizeBaseUrl(baseUrl: string | undefined) {
   return baseUrl?.replace(/\/$/, '');
 }
 
+function buildAbsoluteUrl(path: string) {
+  const baseUrl = getAppBaseUrl();
+
+  if (!baseUrl) {
+    return path;
+  }
+
+  return new URL(path, baseUrl).toString();
+}
+
 export function getEventAttendeesPath(eventId: string) {
-  return `/events/${encodeEventId(eventId)}/attendees`;
+  return `/events/${encodeURIComponent(eventId)}/attendees`;
 }
 
 export function getEventEditPath(eventId: string) {
-  return `/events/${encodeEventId(eventId)}/edit`;
+  return `/events/${encodeURIComponent(eventId)}/edit`;
 }
 
 export function getEventSubscribePath(eventId: string) {
-  return `/events/${encodeEventId(eventId)}/subscribe`;
+  return `/events/${encodeURIComponent(eventId)}/subscribe`;
+}
+
+export function getActivityMarkAttendancePath(activityId: string) {
+  return `/activities/${encodeURIComponent(activityId)}/markAttendance`;
 }
 
 export function getAppBaseUrl() {
@@ -33,12 +43,9 @@ export function getAppBaseUrl() {
 }
 
 export function getEventSubscribeUrl(eventId: string) {
-  const baseUrl = getAppBaseUrl();
-  const subscribePath = getEventSubscribePath(eventId);
+  return buildAbsoluteUrl(getEventSubscribePath(eventId));
+}
 
-  if (!baseUrl) {
-    return subscribePath;
-  }
-
-  return new URL(subscribePath, baseUrl).toString();
+export function getActivityMarkAttendanceUrl(activityId: string) {
+  return buildAbsoluteUrl(getActivityMarkAttendancePath(activityId));
 }
