@@ -69,18 +69,18 @@ function AccordionContent({
   ...props
 }: React.ComponentProps<typeof AccordionPrimitive.Content>) {
   return (
-    <AccordionPrimitive.Content
-      data-slot="accordion-content"
-      className={cn(
-        'overflow-hidden px-4 text-sm data-open:animate-accordion-down data-closed:animate-accordion-up',
-        className,
+      <AccordionPrimitive.Content
+        data-slot="accordion-content"
+        className={cn(
+          'overflow-hidden px-4 text-sm data-open:animate-accordion-down data-closed:animate-accordion-up',
+          className,
       )}
       {...props}
-    >
-      <div className="h-(--radix-accordion-content-height) pt-0 pb-4 [&_a:not([data-slot=button])]:underline [&_a:not([data-slot=button])]:underline-offset-3 [&_a:not([data-slot=button])]:hover:text-foreground [&_p:not(:last-child)]:mb-4">
-        {children}
-      </div>
-    </AccordionPrimitive.Content>
+      >
+        <div className="pt-0 pb-4 [&_a:not([data-slot=button])]:underline [&_a:not([data-slot=button])]:underline-offset-3 [&_a:not([data-slot=button])]:hover:text-foreground [&_p:not(:last-child)]:mb-4">
+          {children}
+        </div>
+      </AccordionPrimitive.Content>
   );
 }
 
