@@ -33,8 +33,10 @@ export default function EmptyActivities({
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
-        <Button asChild className="w-full sm:w-auto" size="lg">
-          <Link href={getEventEditPath(eventId)}>Add Activity</Link>
+        <Button asChild className="w-full sm:w-auto" size="lg" variant="outline">
+          <Link href={getEventEditPath(eventId)}>
+            Add Activity
+          </Link>
         </Button>
       </EmptyContent>
     </Empty>
