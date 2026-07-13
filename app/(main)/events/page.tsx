@@ -1,22 +1,41 @@
 'use client';
 
-import { useQuery } from 'convex/react';
+import { useState } from 'react';
 import CreateEventItem from '@/app/(main)/events/_components/CreateEventItem';
 import EventActivities from '@/app/(main)/events/_components/EventActivities';
 import EventIconButtons from '@/app/(main)/events/_components/EventIconButtons';
 import EmptyEvents from '@/app/(main)/events/_components/EmptyEvents';
 import EventsPageSkeleton from '@/app/(main)/events/_components/EventsPageSkeleton';
+import ErrorState from '@/components/error-state';
 import { api } from '@/convex/_generated/api';
 import { Accordion, type AccordionEntry } from '@/components/accordion';
+import { useQueryWithStatus } from '@/hooks/useQueryWithStatus';
 
-export default function Events() {
-  const events = useQuery(api.events.getMyEvents);
+function EventsContent({
+  onRetry,
+}: {
+  onRetry: () => void;
+}) {
+  const query = useQueryWithStatus(api.events.getMyEvents, {});
 
-  if (events === undefined) {
+  if (query.status === 'pending') {
     return <EventsPageSkeleton />;
   }
 
-  if (events.length === 0) {
+  if (query.status === 'error') {
+    return (
+      <section className="mx-auto flex w-full max-w-2xl flex-col">
+        <ErrorState
+          actionLabel="Try again"
+          description="Something went wrong while loading your events."
+          onAction={onRetry}
+          title="Unable to load events"
+        />
+      </section>
+    );
+  }
+
+  if (query.data.length === 0) {
     return (
       <section className="mx-auto flex w-full max-w-2xl flex-col">
         <EmptyEvents />
@@ -24,7 +43,7 @@ export default function Events() {
     );
   }
 
-  const entries: AccordionEntry[] = events.map((event) => ({
+  const entries: AccordionEntry[] = query.data.map((event) => ({
     id: event._id,
     label: event.title,
     actions: <EventIconButtons eventId={event._id} />,
@@ -36,5 +55,18 @@ export default function Events() {
       <Accordion entries={entries} />
       <CreateEventItem />
     </section>
+  );
+}
+
+export default function Events() {
+  const [retryKey, setRetryKey] = useState(0);
+
+  return (
+    <EventsContent
+      key={retryKey}
+      onRetry={() => {
+        setRetryKey((currentValue) => currentValue + 1);
+      }}
+    />
   );
 }
