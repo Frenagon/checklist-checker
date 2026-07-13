@@ -2,8 +2,8 @@
 
 import { useQuery } from 'convex/react';
 import CreateEventItem from '@/app/(main)/events/_components/CreateEventItem';
+import EventActivities from '@/app/(main)/events/_components/EventActivities';
 import EventIconButtons from '@/app/(main)/events/_components/EventIconButtons';
-import EmptyActivities from '@/app/(main)/events/_components/EmptyActivities';
 import EmptyEvents from '@/app/(main)/events/_components/EmptyEvents';
 import EventsPageSkeleton from '@/app/(main)/events/_components/EventsPageSkeleton';
 import { api } from '@/convex/_generated/api';
@@ -28,7 +28,7 @@ export default function Events() {
     id: event._id,
     label: event.title,
     actions: <EventIconButtons eventId={event._id} />,
-    content: <EmptyActivities eventId={event._id} />,
+    content: <EventActivities eventId={event._id} />,
   }));
 
   return (
