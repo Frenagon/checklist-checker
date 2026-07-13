@@ -1,16 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 
 import {
-  type ReactElement,
   forwardRef,
   useCallback,
   useEffect,
   useRef,
   useState,
+  type ReactElement,
 } from 'react';
+import QRCode from 'qrcode';
 import { flushSync } from 'react-dom';
 import { useReactToPrint } from 'react-to-print';
-import QRCode from 'qrcode';
 
 const qrCodeDataUrlCache = new Map<string, Promise<string>>();
 const printPageStyle = '@page { margin: 16mm; }';
@@ -31,26 +31,27 @@ type QrCodePrintDocumentProps = PrintQrCodeOptions & {
   qrCodeDataUrl: string | null;
 };
 
-const QrCodePrintDocument = forwardRef<HTMLDivElement, QrCodePrintDocumentProps>(
-  function QrCodePrintDocument({ title, subtitle, url, qrCodeDataUrl }, ref) {
-    return (
-      <div className="flex w-full justify-center bg-white text-black" ref={ref}>
-        <div className="flex w-full max-w-[480px] flex-col items-center gap-6 text-center">
-          <h1 className="text-[28px] leading-tight font-semibold">{title}</h1>
-          <p className="text-base leading-relaxed">{subtitle}</p>
-          {qrCodeDataUrl ? (
-            <img
-              alt={`${title} QR code`}
-              className="size-80"
-              src={qrCodeDataUrl}
-            />
-          ) : null}
-          <code className="max-w-full break-words text-xs">{url}</code>
-        </div>
+const QrCodePrintDocument = forwardRef<
+  HTMLDivElement,
+  QrCodePrintDocumentProps
+>(function QrCodePrintDocument({ title, subtitle, url, qrCodeDataUrl }, ref) {
+  return (
+    <div className="flex w-full justify-center bg-white text-black" ref={ref}>
+      <div className="flex w-full max-w-120 flex-col items-center gap-6 text-center">
+        <h1 className="text-[28px] leading-tight font-semibold">{title}</h1>
+        <p className="text-base leading-relaxed">{subtitle}</p>
+        {qrCodeDataUrl ? (
+          <img
+            alt={`${title} QR code`}
+            className="size-80"
+            src={qrCodeDataUrl}
+          />
+        ) : null}
+        <code className="max-w-full wrap-break-word text-xs">{url}</code>
       </div>
-    );
-  },
-);
+    </div>
+  );
+});
 
 export async function getQrCodeDataUrl(value: string) {
   const existingDataUrl = qrCodeDataUrlCache.get(value);
@@ -111,7 +112,7 @@ export function useQrCodePrint({
 
   const handlePrint = useCallback(async () => {
     if (qrCodeDataUrl) {
-      await reactToPrint();
+      reactToPrint();
       return;
     }
 
@@ -119,7 +120,7 @@ export function useQrCodePrint({
     flushSync(() => {
       setQrCodeDataUrl(generatedQrCodeDataUrl);
     });
-    await reactToPrint();
+    reactToPrint();
   }, [qrCodeDataUrl, reactToPrint, url]);
 
   return {
@@ -128,7 +129,7 @@ export function useQrCodePrint({
     printContent: (
       <div
         aria-hidden
-        className="pointer-events-none fixed top-0 left-[-10000px] opacity-0"
+        className="pointer-events-none fixed top-0 -left-2500 opacity-0"
       >
         <QrCodePrintDocument
           qrCodeDataUrl={qrCodeDataUrl}
