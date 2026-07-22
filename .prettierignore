@@ -1,0 +1,20 @@
+# Dependencies
+node_modules
+
+# Build output
+.next
+out
+build
+dist
+
+# Convex generated code
+convex/_generated
+
+# Vendored AI skill files
+.agents
+skills
+
+# Lockfiles
+*.lock
+package-lock.json
+pnpm-lock.yaml

@@ -1,5 +1,5 @@
-import ActiveTabProvider from '@/app/(main)/_providers/ActiveTabProvider';
 import NavBar from '@/app/(main)/_components/NavBar/NavBar';
+import ActiveTabProvider from '@/app/(main)/_providers/ActiveTabProvider';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

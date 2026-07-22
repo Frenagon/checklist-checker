@@ -16,10 +16,6 @@ export function getEventAttendeesPath(eventId: string) {
   return `/events/${encodeURIComponent(eventId)}/attendees`;
 }
 
-export function getEventEditPath(eventId: string) {
-  return `/events/${encodeURIComponent(eventId)}/edit`;
-}
-
 export function getEventSubscribePath(eventId: string) {
   return `/events/${encodeURIComponent(eventId)}/subscribe`;
 }
