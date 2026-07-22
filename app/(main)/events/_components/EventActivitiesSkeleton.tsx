@@ -29,9 +29,9 @@ function ActivityRowSkeleton({
 export default function EventActivitiesSkeleton() {
   return (
     <ItemGroup>
-      <ActivityRowSkeleton titleWidthClassName="w-40 sm:w-48" />
-      <ActivityRowSkeleton titleWidthClassName="w-36 sm:w-44" />
-      <ActivityRowSkeleton titleWidthClassName="w-44 sm:w-52" />
+      <ActivityRowSkeleton titleWidthClassName="w-auto sm:w-48" />
+      <ActivityRowSkeleton titleWidthClassName="w-auto sm:w-44" />
+      <ActivityRowSkeleton titleWidthClassName="w-auto sm:w-52" />
     </ItemGroup>
   );
 }
