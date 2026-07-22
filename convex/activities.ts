@@ -1,12 +1,11 @@
 import { v } from 'convex/values';
 import type { Doc } from './_generated/dataModel';
 import { query } from './_generated/server';
+import { AppError, ErrorCodes, type ErrorPayload } from './errors.internal';
 import {
-  AppError,
-  ErrorCodes,
-  type ErrorPayload,
-} from './errors.internal';
-import { getEventOrThrow, getExistingRegistration } from './event-access.internal';
+  getEventOrThrow,
+  getExistingRegistration,
+} from './event-access.internal';
 import { requireAuthenticatedUserId } from './users';
 
 const blockedEventAccessError: ErrorPayload = {
@@ -28,7 +27,11 @@ export const getEventActivities = query({
     const event = await getEventOrThrow(ctx, args.eventId);
 
     if (event.createdBy !== userId) {
-      const registration = await getExistingRegistration(ctx, userId, args.eventId);
+      const registration = await getExistingRegistration(
+        ctx,
+        userId,
+        args.eventId,
+      );
 
       if (registration === null) {
         throw new AppError(eventNotFoundError);
