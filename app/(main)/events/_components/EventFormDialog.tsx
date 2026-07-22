@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { cn } from '@/lib/utils';
 
 export type EventFormDialogProps = {
   children?: ReactNode;
@@ -24,7 +25,14 @@ export default function EventFormDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {children ? <DialogTrigger asChild>{children}</DialogTrigger> : null}
-      <DialogContent>
+      <DialogContent
+        className={cn(
+          // Fullscreen on small devices...
+          'inset-0 h-full max-h-none w-full max-w-none translate-x-0 translate-y-0 overflow-y-auto rounded-none',
+          // ...and the standard centered dialog from the sm breakpoint up.
+          'sm:inset-auto sm:top-1/2 sm:left-1/2 sm:h-auto sm:max-h-[calc(100dvh-2rem)] sm:w-full sm:max-w-md sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-4xl',
+        )}
+      >
         <DialogTitle className="sr-only">Event Form</DialogTitle>
         <DialogDescription className="sr-only">
           Create or edit an event.
