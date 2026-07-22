@@ -9,8 +9,6 @@ import {
   Share2Icon,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import type { Doc, Id } from '@/convex/_generated/dataModel';
-import { api } from '@/convex/_generated/api';
 import ErrorState from '@/components/error-state';
 import { Button } from '@/components/ui/button';
 import {
@@ -29,7 +27,13 @@ import {
   ItemGroup,
   ItemTitle,
 } from '@/components/ui/item';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { api } from '@/convex/_generated/api';
+import type { Doc, Id } from '@/convex/_generated/dataModel';
 import { useQueryWithStatus } from '@/hooks/useQueryWithStatus';
 import { getActivityMarkAttendanceUrl } from '@/lib/event-links';
 import { useQrCodePrint } from '@/lib/qr-code';
@@ -203,7 +207,9 @@ function EventActivitiesContent({
 }: EventActivitiesProps & {
   onRetry: () => void;
 }) {
-  const query = useQueryWithStatus(api.activities.getEventActivities, { eventId });
+  const query = useQueryWithStatus(api.activities.getEventActivities, {
+    eventId,
+  });
 
   if (query.status === 'pending') {
     return <EventActivitiesSkeleton />;

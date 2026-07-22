@@ -13,7 +13,9 @@ type ActiveTabContextValue = {
   setActiveTab: React.Dispatch<React.SetStateAction<NavigationKey>>;
 };
 
-const ActiveTabContext = React.createContext<ActiveTabContextValue | null>(null);
+const ActiveTabContext = React.createContext<ActiveTabContextValue | null>(
+  null,
+);
 
 function getActiveTabFromPathname(pathname: string | null): NavigationKey {
   return getNavigationKeyFromPathname(pathname) ?? DEFAULT_TAB;

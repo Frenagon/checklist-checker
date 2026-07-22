@@ -2,20 +2,16 @@
 
 import { useState } from 'react';
 import CreateEventItem from '@/app/(main)/events/_components/CreateEventItem';
+import EmptyEvents from '@/app/(main)/events/_components/EmptyEvents';
 import EventActivities from '@/app/(main)/events/_components/EventActivities';
 import EventIconButtons from '@/app/(main)/events/_components/EventIconButtons';
-import EmptyEvents from '@/app/(main)/events/_components/EmptyEvents';
 import EventsPageSkeleton from '@/app/(main)/events/_components/EventsPageSkeleton';
+import { Accordion, type AccordionEntry } from '@/components/accordion';
 import ErrorState from '@/components/error-state';
 import { api } from '@/convex/_generated/api';
-import { Accordion, type AccordionEntry } from '@/components/accordion';
 import { useQueryWithStatus } from '@/hooks/useQueryWithStatus';
 
-function EventsContent({
-  onRetry,
-}: {
-  onRetry: () => void;
-}) {
+function EventsContent({ onRetry }: { onRetry: () => void }) {
   const query = useQueryWithStatus(api.events.getMyEvents, {});
 
   if (query.status === 'pending') {

@@ -1,5 +1,10 @@
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemGroup,
+} from '@/components/ui/item';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Item, ItemActions, ItemContent, ItemGroup } from '@/components/ui/item';
 
 type ActivityRowSkeletonProps = {
   titleWidthClassName: string;
