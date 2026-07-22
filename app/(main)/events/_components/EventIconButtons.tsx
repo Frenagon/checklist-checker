@@ -42,10 +42,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import {
-  getEventAttendeesPath,
-  getEventSubscribeUrl,
-} from '@/lib/event-links';
+import { getEventAttendeesPath, getEventSubscribeUrl } from '@/lib/event-links';
 import { cn } from '@/lib/utils';
 
 export type EventIconButtonsProps = {
