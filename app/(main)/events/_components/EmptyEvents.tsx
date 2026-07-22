@@ -1,5 +1,5 @@
 import { CalendarPlusIcon } from 'lucide-react';
-import Link from 'next/link';
+import EventFormDialog from '@/app/(main)/events/_components/EventFormDialog';
 import { Button } from '@/components/ui/button';
 import {
   Empty,
@@ -29,9 +29,11 @@ export default function EmptyEvents({ className }: EmptyEventsProps) {
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
-        <Button asChild className="w-full sm:w-auto" size="lg">
-          <Link href="/events/create">Create Event</Link>
-        </Button>
+        <EventFormDialog>
+          <Button className="w-full sm:w-auto" size="lg">
+            Create Event
+          </Button>
+        </EventFormDialog>
       </EmptyContent>
     </Empty>
   );

@@ -1,5 +1,5 @@
 import { ListTodoIcon } from 'lucide-react';
-import Link from 'next/link';
+import EventFormDialog from '@/app/(main)/events/_components/EventFormDialog';
 import { Button } from '@/components/ui/button';
 import {
   Empty,
@@ -9,7 +9,6 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/empty';
-import { getEventEditPath } from '@/lib/event-links';
 import { cn } from '@/lib/utils';
 
 export type EmptyActivitiesProps = {
@@ -17,10 +16,7 @@ export type EmptyActivitiesProps = {
   className?: string;
 };
 
-export default function EmptyActivities({
-  eventId,
-  className,
-}: EmptyActivitiesProps) {
+export default function EmptyActivities({ className }: EmptyActivitiesProps) {
   return (
     <Empty className={cn('px-6 py-10 sm:px-12 sm:py-14', className)}>
       <EmptyHeader className="gap-3">
@@ -33,11 +29,11 @@ export default function EmptyActivities({
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
-        <Button asChild className="w-full sm:w-auto" size="lg" variant="outline">
-          <Link href={getEventEditPath(eventId)}>
+        <EventFormDialog>
+          <Button className="w-full sm:w-auto" size="lg" variant="outline">
             Add Activity
-          </Link>
-        </Button>
+          </Button>
+        </EventFormDialog>
       </EmptyContent>
     </Empty>
   );

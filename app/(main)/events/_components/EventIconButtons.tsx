@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import ActiveTabLink from '@/app/(main)/_components/ActiveTabLink';
+import EventFormDialog from '@/app/(main)/events/_components/EventFormDialog';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -43,7 +44,6 @@ import {
 } from '@/components/ui/tooltip';
 import {
   getEventAttendeesPath,
-  getEventEditPath,
   getEventSubscribeUrl,
 } from '@/lib/event-links';
 import { cn } from '@/lib/utils';
@@ -74,13 +74,13 @@ export default function EventIconButtons({
 }: EventIconButtonsProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileShareOpen, setIsMobileShareOpen] = useState(false);
+  const [isEventFormOpen, setIsEventFormOpen] = useState(false);
 
   const subscribeUrl = useMemo(() => getEventSubscribeUrl(eventId), [eventId]);
   const attendeesPath = useMemo(
     () => getEventAttendeesPath(eventId),
     [eventId],
   );
-  const editPath = useMemo(() => getEventEditPath(eventId), [eventId]);
 
   const handleEmailShare = useCallback(() => {
     window.location.href = buildEmailShareUrl(subscribeUrl);
@@ -148,6 +148,16 @@ export default function EventIconButtons({
     [],
   );
 
+  const handleEditOpen = useCallback(() => {
+    setIsEventFormOpen(true);
+  }, []);
+
+  const handleMobileEditOpen = useCallback(() => {
+    setIsMobileMenuOpen(false);
+    setIsMobileShareOpen(false);
+    setIsEventFormOpen(true);
+  }, []);
+
   return (
     <div className={cn('flex items-center', className)}>
       <div className="hidden items-center gap-2 md:flex">
@@ -203,14 +213,12 @@ export default function EventIconButtons({
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              asChild
               aria-label="Edit event"
+              onClick={handleEditOpen}
               size="icon-sm"
               variant="ghost"
             >
-              <ActiveTabLink href={editPath}>
-                <PencilIcon />
-              </ActiveTabLink>
+              <PencilIcon />
             </Button>
           </TooltipTrigger>
           <TooltipContent>
@@ -280,21 +288,22 @@ export default function EventIconButtons({
               </Button>
             </SheetClose>
 
-            <SheetClose asChild>
-              <Button
-                asChild
-                className="w-full justify-start rounded-2xl"
-                variant="ghost"
-              >
-                <ActiveTabLink href={editPath}>
-                  <PencilIcon />
-                  <span>Edit</span>
-                </ActiveTabLink>
-              </Button>
-            </SheetClose>
+            <Button
+              className="w-full justify-start rounded-2xl"
+              onClick={handleMobileEditOpen}
+              variant="ghost"
+            >
+              <PencilIcon />
+              <span>Edit</span>
+            </Button>
           </div>
         </SheetContent>
       </Sheet>
+
+      <EventFormDialog
+        onOpenChange={setIsEventFormOpen}
+        open={isEventFormOpen}
+      />
     </div>
   );
 }
