@@ -22,7 +22,10 @@ const registrationNotFoundError: ErrorPayload = {
 export async function getEventOrThrow(ctx: FunctionCtx, eventId: Id<'events'>) {
   const event = await ctx.db.get(eventId);
 
-  if (event === null) {
+  // Only `active` events are visible to consumers. Anything else (today just
+  // `deleting`, mid-purge) is treated as gone so no one observes a
+  // half-deleted event, and any future non-active status is hidden by default.
+  if (event === null || event.status !== 'active') {
     throw new AppError(eventNotFoundError);
   }
 

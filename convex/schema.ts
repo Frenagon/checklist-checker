@@ -10,7 +10,17 @@ export default defineSchema({
   events: defineTable({
     createdBy: v.id('users'),
     title: v.string(),
-  }).index('by_createdBy', ['createdBy']),
+    // Lifecycle status. `active` is a live event; `deleting` means it has been
+    // removed from every read path while the mark-then-sweep purge removes its
+    // child data. Optional only transiently for the backfill migration; the
+    // narrowed schema makes it required.
+    status: v.optional(v.union(v.literal('active'), v.literal('deleting'))),
+  })
+    // Active events for an owner are exactly those with `status` undefined, so
+    // this composite index lets owner listings skip `deleting` tombstones
+    // entirely instead of reading and filtering them in memory.
+    .index('by_createdBy_and_status', ['createdBy', 'status'])
+    .index('by_status', ['status']),
   activities: defineTable({
     eventId: v.id('events'),
     title: v.string(),
