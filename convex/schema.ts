@@ -12,9 +12,9 @@ export default defineSchema({
     title: v.string(),
     // Lifecycle status. `active` is a live event; `deleting` means it has been
     // removed from every read path while the mark-then-sweep purge removes its
-    // child data. Optional only transiently for the backfill migration; the
-    // narrowed schema makes it required.
-    status: v.optional(v.union(v.literal('active'), v.literal('deleting'))),
+    // child data. Required so a future status can never be silently mistaken
+    // for an active event.
+    status: v.union(v.literal('active'), v.literal('deleting')),
   })
     // Active events for an owner are exactly those with `status` set to
     // `active`, so this composite index lets owner listings skip `deleting`
