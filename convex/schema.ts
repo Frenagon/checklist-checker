@@ -16,9 +16,9 @@ export default defineSchema({
     // narrowed schema makes it required.
     status: v.optional(v.union(v.literal('active'), v.literal('deleting'))),
   })
-    // Active events for an owner are exactly those with `status` undefined, so
-    // this composite index lets owner listings skip `deleting` tombstones
-    // entirely instead of reading and filtering them in memory.
+    // Active events for an owner are exactly those with `status` set to
+    // `active`, so this composite index lets owner listings skip `deleting`
+    // tombstones entirely instead of reading and filtering them in memory.
     .index('by_createdBy_and_status', ['createdBy', 'status'])
     .index('by_status', ['status']),
   activities: defineTable({
