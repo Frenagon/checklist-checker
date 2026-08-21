@@ -12,10 +12,6 @@ function buildAbsoluteUrl(path: string) {
   return new URL(path, baseUrl).toString();
 }
 
-export function getEventAttendeesPath(eventId: string) {
-  return `/events/${encodeURIComponent(eventId)}/attendees`;
-}
-
 export function getEventSubscribePath(eventId: string) {
   return `/events/${encodeURIComponent(eventId)}/subscribe`;
 }

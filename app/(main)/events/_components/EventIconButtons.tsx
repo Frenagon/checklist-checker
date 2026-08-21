@@ -17,7 +17,7 @@ import {
   Share2Icon,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import ActiveTabLink from '@/app/(main)/_components/ActiveTabLink';
+import EventAttendeesDialog from '@/app/(main)/events/_components/EventAttendeesDialog';
 import EventFormDialog from '@/app/(main)/events/_components/EventFormDialog';
 import { Button } from '@/components/ui/button';
 import {
@@ -31,7 +31,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetHeader,
   SheetTitle,
@@ -42,7 +41,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { getEventAttendeesPath, getEventSubscribeUrl } from '@/lib/event-links';
+import { getEventSubscribeUrl } from '@/lib/event-links';
 import { cn } from '@/lib/utils';
 
 export type EventIconButtonsProps = {
@@ -72,12 +71,9 @@ export default function EventIconButtons({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileShareOpen, setIsMobileShareOpen] = useState(false);
   const [isEventFormOpen, setIsEventFormOpen] = useState(false);
+  const [isAttendeesOpen, setIsAttendeesOpen] = useState(false);
 
   const subscribeUrl = useMemo(() => getEventSubscribeUrl(eventId), [eventId]);
-  const attendeesPath = useMemo(
-    () => getEventAttendeesPath(eventId),
-    [eventId],
-  );
 
   const handleEmailShare = useCallback(() => {
     window.location.href = buildEmailShareUrl(subscribeUrl);
@@ -155,6 +151,16 @@ export default function EventIconButtons({
     setIsEventFormOpen(true);
   }, []);
 
+  const handleAttendeesOpen = useCallback(() => {
+    setIsAttendeesOpen(true);
+  }, []);
+
+  const handleMobileAttendeesOpen = useCallback(() => {
+    setIsMobileMenuOpen(false);
+    setIsMobileShareOpen(false);
+    setIsAttendeesOpen(true);
+  }, []);
+
   return (
     <div className={cn('flex items-center', className)}>
       <div className="hidden items-center gap-2 md:flex">
@@ -192,14 +198,12 @@ export default function EventIconButtons({
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              asChild
               aria-label="View attendees"
+              onClick={handleAttendeesOpen}
               size="icon-sm"
               variant="ghost"
             >
-              <ActiveTabLink href={attendeesPath}>
-                <ListIcon />
-              </ActiveTabLink>
+              <ListIcon />
             </Button>
           </TooltipTrigger>
           <TooltipContent>
@@ -272,18 +276,14 @@ export default function EventIconButtons({
               </div>
             ) : null}
 
-            <SheetClose asChild>
-              <Button
-                asChild
-                className="w-full justify-start rounded-2xl"
-                variant="ghost"
-              >
-                <ActiveTabLink href={attendeesPath}>
-                  <ListIcon />
-                  <span>Attendees</span>
-                </ActiveTabLink>
-              </Button>
-            </SheetClose>
+            <Button
+              className="w-full justify-start rounded-2xl"
+              onClick={handleMobileAttendeesOpen}
+              variant="ghost"
+            >
+              <ListIcon />
+              <span>Attendees</span>
+            </Button>
 
             <Button
               className="w-full justify-start rounded-2xl"
@@ -300,6 +300,11 @@ export default function EventIconButtons({
       <EventFormDialog
         onOpenChange={setIsEventFormOpen}
         open={isEventFormOpen}
+      />
+
+      <EventAttendeesDialog
+        onOpenChange={setIsAttendeesOpen}
+        open={isAttendeesOpen}
       />
     </div>
   );
