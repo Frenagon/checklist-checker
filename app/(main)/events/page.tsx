@@ -47,7 +47,7 @@ function EventsContent({ onRetry }: { onRetry: () => void }) {
   }));
 
   return (
-    <section className="mx-auto flex w-full max-w-2xl flex-col gap-6">
+    <section className="mx-auto flex w-full max-w-2xl flex-col gap-6 pb-6">
       <Accordion entries={entries} />
       <CreateEventItem />
     </section>
